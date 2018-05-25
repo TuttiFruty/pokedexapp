@@ -3,6 +3,8 @@ package edu.pokemon.iut.pokedex.architecture;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
+import android.view.View;
 
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonDetailFragment;
@@ -50,14 +52,25 @@ public class NavigationManager {
      * Displays the next fragment
      *
      * @param fragment
+     * @param sharedElement
      */
-    private void open(Fragment fragment) {
+    private void open(Fragment fragment, View sharedElement) {
         if (mFragmentManager != null) {
             //@formatter:off
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.main_container, fragment)
-                    .addToBackStack(fragment.toString())
-                    .commit();
+
+            if(sharedElement != null){
+                mFragmentManager.beginTransaction()
+                        .addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement))
+                        .addToBackStack(fragment.toString())
+                        .replace(R.id.main_container, fragment)
+                        .commit();
+            }else{
+                mFragmentManager.beginTransaction()
+                        .addToBackStack(fragment.toString())
+                        .replace(R.id.main_container, fragment)
+                        .commit();
+            }
+
             //@formatter:on
         }
     }
@@ -66,10 +79,11 @@ public class NavigationManager {
      * pops every fragment and starts the given fragment as a new one.
      *
      * @param fragment
+     * @param sharedElement
      */
-    private void openAsRoot(Fragment fragment) {
+    private void openAsRoot(Fragment fragment, View sharedElement) {
         popEveryFragment();
-        open(fragment);
+        open(fragment, sharedElement);
     }
 
 
@@ -104,14 +118,14 @@ public class NavigationManager {
         }
     }
 
-    public void startPokemonList() {
+    public void startPokemonList(View sharedElement) {
         Fragment fragment = PokemonListFragment.newInstance();
-        openAsRoot(fragment);
+        openAsRoot(fragment, sharedElement);
     }
 
-    public void startPokemonDetail(int pokemonId) {
-        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId);
-        open(fragment);
+    public void startPokemonDetail(int pokemonId, View sharedElement) {
+        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement));
+        open(fragment, sharedElement);
     }
 
     /**

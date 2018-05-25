@@ -2,6 +2,7 @@ package edu.pokemon.iut.pokedex.ui.pokemonlist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -41,12 +43,17 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(mDataset.get(position).getId()));
         holder.pokemonNumber.setText(Integer.toString(mDataset.get(position).getId()));
         holder.pokemonName.setText(mDataset.get(position).getName());
+        RequestOptions options = new RequestOptions()
+                .centerCrop();
         Glide.with(context)
                 .load(mDataset.get(position).getSpritesString())
+                .apply(options)
                 .into(holder.pokemonLogo);
+
+        ViewCompat.setTransitionName(holder.pokemonLogo, mDataset.get(position).getName());
+        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(mDataset.get(position).getId(), holder.pokemonLogo));
     }
 
     @Override

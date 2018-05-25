@@ -27,7 +27,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
 
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
         if(savedInstanceState == null){
-            mNavigationManager.startPokemonList();
+            mNavigationManager.startPokemonList(null);
         }
     }
 
