@@ -121,7 +121,6 @@ public class PokemonDetailFragment extends BaseFragment {
     private void initView(Pokemon pokemon) {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(R.drawable.material_drawer_shadow_bottom)
                 .dontAnimate();
         Glide.with(getContext())
                 .load(pokemon.getSpritesString())
