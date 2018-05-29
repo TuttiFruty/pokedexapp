@@ -2,6 +2,7 @@ package edu.pokemon.iut.pokedex;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,9 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         // Initialize the NavigationManager with this activity's FragmentManager
         mNavigationManager.init(getSupportFragmentManager());
         mNavigationManager.setNavigationListener(this);
+
+        View detailsFrame = findViewById(R.id.detail_container);
+        mNavigationManager.setTabletNavigation(detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE);
 
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
         if(savedInstanceState == null){

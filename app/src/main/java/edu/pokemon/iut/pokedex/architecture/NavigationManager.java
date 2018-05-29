@@ -15,6 +15,16 @@ import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
  * Created by becze on 9/30/2015.
  */
 public class NavigationManager {
+    private boolean tabletNavigation;
+
+    public void setTabletNavigation(boolean tabletNavigation) {
+        this.tabletNavigation = tabletNavigation;
+    }
+
+    public boolean isTabletNavigation() {
+        return tabletNavigation;
+    }
+
     /**
      * Listener interface for navigation events.
      */
@@ -50,24 +60,25 @@ public class NavigationManager {
 
     /**
      * Displays the next fragment
-     *
-     * @param fragment
+     *  @param fragment
      * @param sharedElement
+     * @param isRoot
      */
-    private void open(Fragment fragment, View sharedElement) {
+    private void open(Fragment fragment, View sharedElement, boolean isRoot) {
         if (mFragmentManager != null) {
             //@formatter:off
+            int idContainer = isTabletNavigation() && !isRoot?R.id.detail_container:R.id.main_container;
 
             if(sharedElement != null){
                 mFragmentManager.beginTransaction()
                         .addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement))
                         .addToBackStack(fragment.toString())
-                        .replace(R.id.main_container, fragment)
+                        .replace(idContainer, fragment)
                         .commit();
             }else{
                 mFragmentManager.beginTransaction()
                         .addToBackStack(fragment.toString())
-                        .replace(R.id.main_container, fragment)
+                        .replace(idContainer, fragment)
                         .commit();
             }
 
@@ -83,7 +94,7 @@ public class NavigationManager {
      */
     private void openAsRoot(Fragment fragment, View sharedElement) {
         popEveryFragment();
-        open(fragment, sharedElement);
+        open(fragment, sharedElement, true);
     }
 
 
@@ -125,7 +136,7 @@ public class NavigationManager {
 
     public void startPokemonDetail(int pokemonId, View sharedElement) {
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement));
-        open(fragment, sharedElement);
+        open(fragment, sharedElement, false);
     }
 
     /**
