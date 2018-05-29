@@ -10,7 +10,7 @@ import edu.pokemon.iut.pokedex.data.model.Pokemon;
 import edu.pokemon.iut.pokedex.data.model.Sprites;
 
 @Singleton
-@Database(entities = {Pokemon.class, Sprites.class}, version = 1, exportSchema = false)
+@Database(entities = {Pokemon.class, Sprites.class}, version = 2, exportSchema = false)
 public abstract class PokedexDatabase extends RoomDatabase {
     public abstract PokemonDao pokemonDao();
 }

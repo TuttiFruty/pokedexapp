@@ -19,14 +19,16 @@ public class DatabaseModule {
     }
 
     @Provides
-    public PokedexDatabase providesPokedexDatabase(){
+    public PokedexDatabase providesPokedexDatabase() {
         return Room.databaseBuilder(context,
-                PokedexDatabase.class, "pokedex-database").build();
+                PokedexDatabase.class, "pokedex-database")
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     @Provides
     @Inject
-    public PokemonDao providesPokemonDao(PokedexDatabase pokedexDatabase){
+    public PokemonDao providesPokemonDao(PokedexDatabase pokedexDatabase) {
         return pokedexDatabase.pokemonDao();
     }
 }

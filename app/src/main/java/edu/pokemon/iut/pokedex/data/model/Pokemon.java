@@ -46,6 +46,8 @@ public class Pokemon {
 
     private String spritesString;
 
+    private boolean isCapture = false;
+
     public int getId() {
         return id;
     }
@@ -140,5 +142,18 @@ public class Pokemon {
 
     public void setTypes(List<Type> types) {
         this.types = types;
+    }
+
+    public boolean isCapture() {
+        return isCapture;
+    }
+
+    public void setCapture(boolean capture) {
+        isCapture = capture;
+    }
+
+    public Pokemon capture() {
+        setCapture(!isCapture);
+        return this;
     }
 }

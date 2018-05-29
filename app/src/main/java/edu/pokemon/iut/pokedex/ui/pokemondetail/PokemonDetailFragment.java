@@ -144,7 +144,7 @@ public class PokemonDetailFragment extends BaseFragment {
                 })
                 .into(imageViewPokemonLogo);
         setTitle(pokemon.getName());
-        textViewPokemonId.setText(pokemon.getStringId());
+        textViewPokemonId.setText("No. "+pokemon.getStringId());
         textViewPokemonName.setText(pokemon.getName());
         textViewPokemonBaseExp.setText(pokemon.getStringBaseExp() + " exp");
         textViewPokemonHeight.setText(pokemon.getStringHeight() + " m");

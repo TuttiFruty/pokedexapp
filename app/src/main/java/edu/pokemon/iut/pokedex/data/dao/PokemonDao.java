@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface PokemonDao {
     @Query("SELECT id from pokemon where id = :pokemonId")
     int hasPokemon(int pokemonId);
 
+    @Update(onConflict = REPLACE)
+    void capture(Pokemon pokemon);
 }

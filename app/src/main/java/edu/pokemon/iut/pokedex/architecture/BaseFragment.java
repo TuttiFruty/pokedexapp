@@ -31,8 +31,6 @@ public class BaseFragment extends Fragment {
         Log.w("POKEDEX", "onDestroy: " + this);
     }
 
-
-
     /**
      * Initializes the ActionBar
      *
@@ -50,7 +48,7 @@ public class BaseFragment extends Fragment {
     protected void setTitle(String title){
         if(getActivity() != null && getActivity() instanceof  BaseActivity){
             ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-            supportActionBar.setTitle(title);
+            supportActionBar.setTitle(title.toUpperCase());
         }
     }
 

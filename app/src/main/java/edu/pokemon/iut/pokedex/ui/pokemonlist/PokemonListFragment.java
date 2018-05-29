@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +15,17 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import edu.pokemon.iut.pokedex.NavigationActivity;
-import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 import edu.pokemon.iut.pokedex.PokedexApp;
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.BaseFragment;
+import edu.pokemon.iut.pokedex.architecture.NavigationManager;
+import edu.pokemon.iut.pokedex.data.model.Pokemon;
 
 /**
  * Example Fragment
  * Created by becze on 11/25/2015.
  */
-public class PokemonListFragment extends BaseFragment {
+public class PokemonListFragment extends BaseFragment implements PokemonAdapter.CaptureListener{
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
 
@@ -84,7 +83,7 @@ public class PokemonListFragment extends BaseFragment {
         }
 
         pokemonListView.setLayoutManager(mLayoutManager);
-        mAdapter = new PokemonAdapter(getContext(), navigationManager);
+        mAdapter = new PokemonAdapter(getContext(), navigationManager, this);
         pokemonListView.setAdapter(mAdapter);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
@@ -94,5 +93,10 @@ public class PokemonListFragment extends BaseFragment {
             mAdapter.setData(pokemonList);
         });
 
+    }
+
+    @Override
+    public void onCapture(Pokemon pokemon) {
+        viewModel.capture(pokemon);
     }
 }

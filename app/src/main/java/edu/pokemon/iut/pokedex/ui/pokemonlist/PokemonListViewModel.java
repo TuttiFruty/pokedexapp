@@ -31,4 +31,8 @@ public class PokemonListViewModel extends ViewModel {
    public LiveData<List<Pokemon>> getPokemons(){
         return this.pokemonList;
    }
+
+    public void capture(Pokemon pokemon) {
+        pokemonRepository.capture(pokemon);
+    }
 }

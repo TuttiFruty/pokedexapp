@@ -3,6 +3,7 @@ package edu.pokemon.iut.pokedex.ui.pokemonlist;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,12 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     private final Context context;
     private final NavigationManager navigationManager;
     private List<Pokemon> mDataset;
+    private CaptureListener captureListener;
 
-    public PokemonAdapter(Context context, NavigationManager navigationManager) {
+    public PokemonAdapter(Context context, NavigationManager navigationManager, CaptureListener captureListener) {
         this.context = context;
         this.navigationManager = navigationManager;
+        this.captureListener = captureListener;
     }
 
     @NonNull
@@ -43,17 +46,22 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.pokemonNumber.setText(Integer.toString(mDataset.get(position).getId()));
-        holder.pokemonName.setText(mDataset.get(position).getName());
+        Pokemon pokemon = mDataset.get(position);
+        holder.pokemonNumber.setText(Integer.toString(pokemon.getId()));
+        holder.pokemonName.setText(pokemon.getName());
+
+        holder.pokemonCapture.setImageResource(pokemon.isCapture()? R.drawable.ic_launcher_pokeball:R.drawable.ic_launcher_pokeball_empty);
+
         RequestOptions options = new RequestOptions()
                 .centerCrop();
         Glide.with(context)
-                .load(mDataset.get(position).getSpritesString())
+                .load(pokemon.getSpritesString())
                 .apply(options)
                 .into(holder.pokemonLogo);
 
-        ViewCompat.setTransitionName(holder.pokemonLogo, mDataset.get(position).getName());
-        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(mDataset.get(position).getId(), holder.pokemonLogo));
+        ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName());
+        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), holder.pokemonLogo));
+        holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon.capture()));
     }
 
     @Override
@@ -70,12 +78,17 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public interface CaptureListener {
+        void onCapture(Pokemon pokemon);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView pokemonName;
         public TextView pokemonNumber;
         public ImageView pokemonLogo;
         public View pokemonLine;
+        public ImageView pokemonCapture;
 
         public ViewHolder(View v) {
             super(v);
@@ -83,6 +96,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
             pokemonNumber = v.findViewById(R.id.tv_pokemon_number);
             pokemonLogo = v.findViewById(R.id.iv_pokemon_logo);
             pokemonLine = v.findViewById(R.id.cl_pokemon_line);
+            pokemonCapture = v.findViewById(R.id.iv_pokemon_capture);
         }
     }
 }

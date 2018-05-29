@@ -29,7 +29,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
 
     @Override
     public LiveData<List<Pokemon>> getPokemons() {
-        refreshPokemon(1, 151);
+        refreshPokemon(1, 251);
 
         return pokemonDao.loadAll();
     }
@@ -39,6 +39,11 @@ public class PokemonRepositoryImpl implements PokemonRepository {
         refreshPokemon(pokemonId, pokemonId);
 
         return pokemonDao.load(pokemonId);
+    }
+
+    @Override
+    public void capture(Pokemon pokemon) {
+        executor.execute(() -> pokemonDao.capture(pokemon));
     }
 
     private void refreshPokemon(int start, int end) {
