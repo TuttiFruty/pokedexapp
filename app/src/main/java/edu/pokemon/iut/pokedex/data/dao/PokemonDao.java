@@ -31,6 +31,9 @@ public interface PokemonDao {
     @Query("SELECT id from pokemon where id = :pokemonId")
     int hasPokemon(int pokemonId);
 
+    @Query("SELECT COUNT(*) FROM pokemon")
+    LiveData<Integer> getNumberOfPokemon();
+
     @Update(onConflict = REPLACE)
     void capture(Pokemon pokemon);
 

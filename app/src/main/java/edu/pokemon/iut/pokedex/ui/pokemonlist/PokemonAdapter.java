@@ -60,7 +60,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                 .into(holder.pokemonLogo);
 
         ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName());
-        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), holder.pokemonLogo));
+        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), holder.pokemonLogo, false));
         holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon.capture()));
     }
 

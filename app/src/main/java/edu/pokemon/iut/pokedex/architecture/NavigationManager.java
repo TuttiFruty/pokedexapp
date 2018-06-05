@@ -58,11 +58,12 @@ public class NavigationManager {
 
     /**
      * Displays the next fragment
-     *  @param fragment
+     * @param fragment
      * @param sharedElement
      * @param isRoot
+     * @param isSwipe
      */
-    private void open(Fragment fragment, View sharedElement, boolean isRoot) {
+    private void open(Fragment fragment, View sharedElement, boolean isRoot, boolean isSwipe) {
         if (mFragmentManager != null) {
             //@formatter:off
             int idContainer = isTabletNavigation() && !isRoot?R.id.detail_container:R.id.main_container;
@@ -73,7 +74,7 @@ public class NavigationManager {
                 fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
 
-            if(!isTabletNavigation() || isRoot){
+            if(!isTabletNavigation() || isRoot || isSwipe){
                 fragmentTransaction.addToBackStack(fragment.toString());
             }
 
@@ -90,7 +91,7 @@ public class NavigationManager {
      */
     private void openAsRoot(Fragment fragment, View sharedElement) {
         popEveryFragment();
-        open(fragment, sharedElement, true);
+        open(fragment, sharedElement, true, false);
     }
 
 
@@ -130,9 +131,9 @@ public class NavigationManager {
         openAsRoot(fragment, sharedElement);
     }
 
-    public void startPokemonDetail(int pokemonId, View sharedElement) {
+    public void startPokemonDetail(int pokemonId, View sharedElement, boolean isSwipe) {
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement), !isTabletNavigation());
-        open(fragment, sharedElement, false);
+        open(fragment, sharedElement, false, isSwipe);
     }
 
     /**

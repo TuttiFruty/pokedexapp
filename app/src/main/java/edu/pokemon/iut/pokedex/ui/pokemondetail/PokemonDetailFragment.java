@@ -1,5 +1,6 @@
 package edu.pokemon.iut.pokedex.ui.pokemondetail;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -8,12 +9,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.transition.TransitionInflater;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -28,6 +32,8 @@ import butterknife.BindView;
 import edu.pokemon.iut.pokedex.PokedexApp;
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.BaseFragment;
+import edu.pokemon.iut.pokedex.architecture.NavigationManager;
+import edu.pokemon.iut.pokedex.architecture.listener.PokemonGestureListener;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
 import edu.pokemon.iut.pokedex.data.model.Type;
 
@@ -35,7 +41,7 @@ import edu.pokemon.iut.pokedex.data.model.Type;
  * Example Fragment
  * Created by becze on 11/25/2015.
  */
-public class PokemonDetailFragment extends BaseFragment {
+public class PokemonDetailFragment extends BaseFragment implements PokemonGestureListener.Listener {
 
     private static final String TAG = PokemonDetailFragment.class.getSimpleName();
     private static final String KEY_POKEMON_ID = "KEY_POKEMON_ID";
@@ -44,7 +50,11 @@ public class PokemonDetailFragment extends BaseFragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     PokemonViewModel viewModel;
+    @Inject
+    public NavigationManager navigationManager;
 
+    @BindView(R.id.cl_pokemon_detail)
+    View constraintLayoutPokemonDetail;
     @BindView(R.id.iv_pokemon_logo)
     ImageView imageViewPokemonLogo;
     @BindView(R.id.tv_pokemon_numero)
@@ -63,6 +73,7 @@ public class PokemonDetailFragment extends BaseFragment {
     private int pokemonId;
     private View mRootView;
     private boolean isNavigationShown = true;
+    private int idMaxPokemon;
 
     /**
      * @return newInstance of SampleFragment
@@ -110,20 +121,26 @@ public class PokemonDetailFragment extends BaseFragment {
 
         String transitionName = "NO_TRANSITION";
 
-        if(getArguments() !=null) {
+        if (getArguments() != null) {
             isNavigationShown = getArguments().getBoolean(KEY_SHOW_NAVIGATION, true);
             transitionName = getArguments().getString(KEY_TRANSITION_NAME, "NO_TRANSITION");
         }
 
-        initActionBar(isNavigationShown,null);
+        initActionBar(isNavigationShown, null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageViewPokemonLogo.setTransitionName(transitionName);
         }
 
+        if (isNavigationShown) {
+            PokemonGestureListener pokemonGestureListener = new PokemonGestureListener(this,null,this.getContext());
+            constraintLayoutPokemonDetail.setOnTouchListener(pokemonGestureListener);
+        }
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
         viewModel.init(this.pokemonId);
         viewModel.getPokemon().observe(this, this::initView);
+        viewModel.getIdMaxPokemon().observe(this, integer -> idMaxPokemon = integer!=null?integer:0);
     }
 
     private void initView(Pokemon pokemon) {
@@ -148,9 +165,9 @@ public class PokemonDetailFragment extends BaseFragment {
                 })
                 .into(imageViewPokemonLogo);
 
-        setTitle(isNavigationShown?pokemon.getName():null);
+        setTitle(isNavigationShown ? pokemon.getName() : null);
 
-        textViewPokemonId.setText("No. "+pokemon.getStringId());
+        textViewPokemonId.setText("No. " + pokemon.getStringId());
         textViewPokemonName.setText(pokemon.getName());
         textViewPokemonBaseExp.setText(pokemon.getStringBaseExp() + " exp");
         textViewPokemonHeight.setText(pokemon.getStringHeight() + " m");
@@ -163,5 +180,18 @@ public class PokemonDetailFragment extends BaseFragment {
             linearLayoutpokemonTypes.addView(textViewType);
         }
 
+    }
+
+    @Override
+    public void onFling(int direction) {
+        if(direction == PokemonGestureListener.LEFT){
+            if(pokemonId != 1) {
+                navigationManager.startPokemonDetail(pokemonId - 1, imageViewPokemonLogo, true);
+            }
+        }else if (direction == PokemonGestureListener.RIGHT){
+            if(pokemonId != idMaxPokemon){
+                navigationManager.startPokemonDetail(pokemonId + 1, imageViewPokemonLogo,true);
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ public class PokemonViewModel extends ViewModel {
 
     private final PokemonRepository pokemonRepository;
     LiveData<Pokemon> pokemon;
+    LiveData<Integer> idMaxPokemon;
 
     @Inject
     public PokemonViewModel(PokemonRepository pokemonRepository){
@@ -23,10 +24,14 @@ public class PokemonViewModel extends ViewModel {
             return;
         }
         pokemon = pokemonRepository.getPokemon(pokemonId);
+        idMaxPokemon = pokemonRepository.getNumberOfPokemon();
     }
 
     public LiveData<Pokemon> getPokemon(){
         return this.pokemon;
     }
 
+    public LiveData<Integer> getIdMaxPokemon() {
+        return idMaxPokemon;
+    }
 }

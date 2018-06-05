@@ -46,6 +46,11 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     }
 
     @Override
+    public LiveData<Integer> getNumberOfPokemon() {
+        return pokemonDao.getNumberOfPokemon();
+    }
+
+    @Override
     public void capture(Pokemon pokemon) {
         executor.execute(() -> pokemonDao.capture(pokemon));
     }

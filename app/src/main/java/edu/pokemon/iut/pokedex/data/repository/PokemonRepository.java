@@ -12,4 +12,6 @@ public interface PokemonRepository {
     LiveData<Pokemon> getPokemon(int pokemonId);
 
     void capture(Pokemon pokemon);
+
+    LiveData<Integer> getNumberOfPokemon();
 }
