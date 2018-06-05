@@ -74,7 +74,7 @@ public class NavigationManager {
                 fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
 
-            if(!isTabletNavigation() || isRoot || isSwipe){
+            if(!isTabletNavigation() || isRoot || !isSwipe){
                 fragmentTransaction.addToBackStack(fragment.toString());
             }
 
