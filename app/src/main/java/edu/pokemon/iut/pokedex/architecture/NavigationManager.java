@@ -3,6 +3,7 @@ package edu.pokemon.iut.pokedex.architecture;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
@@ -48,12 +49,9 @@ public class NavigationManager {
      */
     public void init(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
-        mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                if (mNavigationListener != null) {
-                    mNavigationListener.onBackstackChanged();
-                }
+        mFragmentManager.addOnBackStackChangedListener(() -> {
+            if (mNavigationListener != null) {
+                mNavigationListener.onBackstackChanged();
             }
         });
     }
@@ -69,19 +67,17 @@ public class NavigationManager {
             //@formatter:off
             int idContainer = isTabletNavigation() && !isRoot?R.id.detail_container:R.id.main_container;
 
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
             if(sharedElement != null){
-                mFragmentManager.beginTransaction()
-                        .addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement))
-                        .addToBackStack(fragment.toString())
-                        .replace(idContainer, fragment)
-                        .commit();
-            }else{
-                mFragmentManager.beginTransaction()
-                        .addToBackStack(fragment.toString())
-                        .replace(idContainer, fragment)
-                        .commit();
+                fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
 
+            if(!isTabletNavigation() || isRoot){
+                fragmentTransaction.addToBackStack(fragment.toString());
+            }
+
+            fragmentTransaction.replace(idContainer,fragment).commit();
             //@formatter:on
         }
     }
@@ -135,7 +131,7 @@ public class NavigationManager {
     }
 
     public void startPokemonDetail(int pokemonId, View sharedElement) {
-        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement));
+        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement), !isTabletNavigation());
         open(fragment, sharedElement, false);
     }
 

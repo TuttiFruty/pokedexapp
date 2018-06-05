@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.transition.TransitionInflater;
-import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,6 +40,7 @@ public class PokemonDetailFragment extends BaseFragment {
     private static final String TAG = PokemonDetailFragment.class.getSimpleName();
     private static final String KEY_POKEMON_ID = "KEY_POKEMON_ID";
     private static final String KEY_TRANSITION_NAME = "KEY_TRANSITION_NAME";
+    private static final String KEY_SHOW_NAVIGATION = "KEY_SHOW_NAVIGATION";
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     PokemonViewModel viewModel;
@@ -66,15 +62,17 @@ public class PokemonDetailFragment extends BaseFragment {
 
     private int pokemonId;
     private View mRootView;
+    private boolean isNavigationShown = true;
 
     /**
      * @return newInstance of SampleFragment
      */
-    public static PokemonDetailFragment newInstance(int pokemonId, String transitionName) {
+    public static PokemonDetailFragment newInstance(int pokemonId, String transitionName, boolean isNavigationShown) {
         PokemonDetailFragment pokemonDetailFragment = new PokemonDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_POKEMON_ID, pokemonId);
         bundle.putString(KEY_TRANSITION_NAME, transitionName);
+        bundle.putBoolean(KEY_SHOW_NAVIGATION, isNavigationShown);
         pokemonDetailFragment.setArguments(bundle);
         return pokemonDetailFragment;
     }
@@ -110,12 +108,18 @@ public class PokemonDetailFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String transitionName = getArguments().getString(KEY_TRANSITION_NAME);
+        String transitionName = "NO_TRANSITION";
+
+        if(getArguments() !=null) {
+            isNavigationShown = getArguments().getBoolean(KEY_SHOW_NAVIGATION, true);
+            transitionName = getArguments().getString(KEY_TRANSITION_NAME, "NO_TRANSITION");
+        }
+
+        initActionBar(isNavigationShown,null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageViewPokemonLogo.setTransitionName(transitionName);
         }
-
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
         viewModel.init(this.pokemonId);
@@ -143,7 +147,9 @@ public class PokemonDetailFragment extends BaseFragment {
                     }
                 })
                 .into(imageViewPokemonLogo);
-        setTitle(pokemon.getName());
+
+        setTitle(isNavigationShown?pokemon.getName():null);
+
         textViewPokemonId.setText("No. "+pokemon.getStringId());
         textViewPokemonName.setText(pokemon.getName());
         textViewPokemonBaseExp.setText(pokemon.getStringBaseExp() + " exp");

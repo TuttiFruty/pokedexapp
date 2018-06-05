@@ -68,7 +68,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initActionBar(false, "Liste Pokemon");
+        initActionBar(false, null);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         pokemonListView.setHasFixedSize(true);
@@ -79,12 +79,18 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         if(orientation == Configuration.ORIENTATION_PORTRAIT){
             mLayoutManager = new LinearLayoutManager(getContext());
         }else{
-            mLayoutManager = new GridLayoutManager(getContext(), 4);
+            if(navigationManager.isTabletNavigation()) {
+                mLayoutManager = new GridLayoutManager(getContext(), 2);
+            }else{
+                mLayoutManager = new GridLayoutManager(getContext(), 3);
+
+            }
         }
 
         pokemonListView.setLayoutManager(mLayoutManager);
         mAdapter = new PokemonAdapter(getContext(), navigationManager, this);
         pokemonListView.setAdapter(mAdapter);
+        pokemonListView.getAdapter().notifyDataSetChanged();
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
         viewModel.init();

@@ -16,6 +16,8 @@ import edu.pokemon.iut.pokedex.R;
  */
 public class BaseFragment extends Fragment {
 
+    private static final String DEFAULT_TITLE = "Pokedex";
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -25,6 +27,7 @@ public class BaseFragment extends Fragment {
 
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -38,17 +41,21 @@ public class BaseFragment extends Fragment {
      * @param title
      */
     protected void initActionBar(boolean showHomeButton, String title) {
-        if (getActivity() != null && getActivity() instanceof BaseActivity ) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
             ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-            supportActionBar.setDisplayHomeAsUpEnabled(showHomeButton);
-            supportActionBar.setTitle(title);
+            if (supportActionBar != null) {
+                supportActionBar.setDisplayHomeAsUpEnabled(showHomeButton);
+                supportActionBar.setTitle(title != null ? title : DEFAULT_TITLE);
+            }
         }
     }
 
-    protected void setTitle(String title){
-        if(getActivity() != null && getActivity() instanceof  BaseActivity){
+    protected void setTitle(String title) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
             ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-            supportActionBar.setTitle(title.toUpperCase());
+            if (supportActionBar != null) {
+                supportActionBar.setTitle(title != null ? title.toUpperCase() : DEFAULT_TITLE);
+            }
         }
     }
 
@@ -58,12 +65,14 @@ public class BaseFragment extends Fragment {
      * @param isShown
      */
     protected void showActionbar(boolean isShown) {
-        if (getActivity() != null && getActivity() instanceof BaseActivity ) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
             ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-            if (isShown) {
-                supportActionBar.show();
-            } else {
-                supportActionBar.hide();
+            if (supportActionBar != null) {
+                if (isShown) {
+                    supportActionBar.show();
+                } else {
+                    supportActionBar.hide();
+                }
             }
         }
     }
