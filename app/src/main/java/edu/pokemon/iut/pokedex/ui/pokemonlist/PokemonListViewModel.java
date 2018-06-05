@@ -21,11 +21,11 @@ public class PokemonListViewModel extends ViewModel {
         this.pokemonRepository = pokemonRepository;
     }
 
-    public void init(){
+    public void init(CharSequence query){
         if(this.pokemonList != null){
             return;
         }
-        pokemonList = pokemonRepository.getPokemons();
+        pokemonList = pokemonRepository.getPokemons(query);
     }
 
    public LiveData<List<Pokemon>> getPokemons(){

@@ -2,6 +2,9 @@ package edu.pokemon.iut.pokedex;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import javax.inject.Inject;
@@ -31,7 +34,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
 
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
         if(savedInstanceState == null){
-            mNavigationManager.startPokemonList(null);
+            mNavigationManager.startPokemonList(null, null);
         }
     }
 
@@ -64,5 +67,29 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
     public void onBackstackChanged() {
         // check if we display a root fragment and enable drawer only on root fragments
         boolean rootFragment = mNavigationManager.isRootFragmentVisible();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        // Configure the search info and add any event listeners...
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mNavigationManager.startPokemonList(null,query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mNavigationManager.startPokemonList(null,newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 }

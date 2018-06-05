@@ -125,8 +125,8 @@ public class NavigationManager {
         }
     }
 
-    public void startPokemonList(View sharedElement) {
-        Fragment fragment = PokemonListFragment.newInstance();
+    public void startPokemonList(View sharedElement, CharSequence query) {
+        Fragment fragment = PokemonListFragment.newInstance(query);
         openAsRoot(fragment, sharedElement);
     }
 

@@ -25,9 +25,13 @@ public interface PokemonDao {
     @Query("SELECT * FROM pokemon")
     LiveData<List<Pokemon>> loadAll();
 
+    @Query("SELECT * FROM pokemon WHERE name LIKE :query")
+    LiveData<List<Pokemon>> loadAllWithFilter(String query);
+
     @Query("SELECT id from pokemon where id = :pokemonId")
     int hasPokemon(int pokemonId);
 
     @Update(onConflict = REPLACE)
     void capture(Pokemon pokemon);
+
 }

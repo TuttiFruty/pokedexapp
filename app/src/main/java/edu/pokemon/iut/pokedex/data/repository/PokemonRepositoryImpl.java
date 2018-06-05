@@ -28,10 +28,14 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     }
 
     @Override
-    public LiveData<List<Pokemon>> getPokemons() {
+    public LiveData<List<Pokemon>> getPokemons(CharSequence query) {
         refreshPokemon(1, 251);
 
-        return pokemonDao.loadAll();
+        if(query!=null){
+            return pokemonDao.loadAllWithFilter(query.toString()+"%");
+        }else{
+            return pokemonDao.loadAll();
+        }
     }
 
     @Override

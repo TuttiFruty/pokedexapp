@@ -28,6 +28,7 @@ import edu.pokemon.iut.pokedex.data.model.Pokemon;
 public class PokemonListFragment extends BaseFragment implements PokemonAdapter.CaptureListener{
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
+    private static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -42,9 +43,15 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
 
     /**
      * @return newInstance of SampleFragment
+     * @param query
      */
-    public static PokemonListFragment newInstance() {
-        return new PokemonListFragment();
+    public static PokemonListFragment newInstance(CharSequence query) {
+        PokemonListFragment pokemonListFragment = new PokemonListFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putCharSequence(KEY_SEARCH_QUERY, query);
+        pokemonListFragment.setArguments(bundle);
+        return pokemonListFragment;
     }
 
     private View mRootView;
@@ -93,7 +100,12 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         pokemonListView.getAdapter().notifyDataSetChanged();
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
-        viewModel.init();
+        CharSequence query = null;
+        if(getArguments() != null){
+            query = getArguments().getCharSequence(KEY_SEARCH_QUERY, null);
+        }
+        viewModel.init(query);
+
         viewModel.getPokemons().observe(this, pokemonList -> {
             // specify an adapter (see also next example)
             mAdapter.setData(pokemonList);
