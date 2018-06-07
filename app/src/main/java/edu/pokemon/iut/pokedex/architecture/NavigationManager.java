@@ -17,6 +17,7 @@ import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
  */
 public class NavigationManager {
     private boolean tabletNavigation;
+    private boolean isSwipe = false;
 
     public void setTabletNavigation(boolean tabletNavigation) {
         this.tabletNavigation = tabletNavigation;
@@ -61,9 +62,8 @@ public class NavigationManager {
      * @param fragment
      * @param sharedElement
      * @param isRoot
-     * @param isSwipe
      */
-    private void open(Fragment fragment, View sharedElement, boolean isRoot, boolean isSwipe) {
+    private void open(Fragment fragment, View sharedElement, boolean isRoot) {
         if (mFragmentManager != null) {
             //@formatter:off
             int idContainer = isTabletNavigation() && !isRoot?R.id.detail_container:R.id.main_container;
@@ -74,7 +74,7 @@ public class NavigationManager {
                 fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
 
-            if(!isTabletNavigation() || isRoot || !isSwipe){
+            if(!isTabletNavigation() || isRoot){
                 fragmentTransaction.addToBackStack(fragment.toString());
             }
 
@@ -91,7 +91,7 @@ public class NavigationManager {
      */
     private void openAsRoot(Fragment fragment, View sharedElement) {
         popEveryFragment();
-        open(fragment, sharedElement, true, false);
+        open(fragment, sharedElement, true);
     }
 
 
@@ -118,11 +118,15 @@ public class NavigationManager {
      */
     public void navigateBack(Activity baseActivity) {
 
-        if (mFragmentManager.getBackStackEntryCount() == 0) {
-            // we can finish the base activity since we have no other fragments
-            baseActivity.finish();
-        } else {
-            mFragmentManager.popBackStackImmediate();
+        if(isSwipe){
+            startPokemonList(null, null);
+        }else {
+            if (mFragmentManager.getBackStackEntryCount() == 0) {
+                // we can finish the base activity since we have no other fragments
+                baseActivity.finish();
+            } else {
+                mFragmentManager.popBackStackImmediate();
+            }
         }
     }
 
@@ -132,8 +136,9 @@ public class NavigationManager {
     }
 
     public void startPokemonDetail(int pokemonId, View sharedElement, boolean isSwipe) {
+        this.isSwipe = isSwipe;
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement), !isTabletNavigation());
-        open(fragment, sharedElement, false, isSwipe);
+        open(fragment, sharedElement, false);
     }
 
     /**
