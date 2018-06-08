@@ -14,6 +14,7 @@ public class NavigationModule {
 
     /**
      * Give access to the navigation manager that provide methods to navigate through the app
+     *
      * @return an instance of {@link NavigationManager}
      */
     @Provides

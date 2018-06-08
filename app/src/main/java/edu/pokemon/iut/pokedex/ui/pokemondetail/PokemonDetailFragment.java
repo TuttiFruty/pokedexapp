@@ -1,7 +1,5 @@
 package edu.pokemon.iut.pokedex.ui.pokemondetail;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,15 +7,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.transition.TransitionInflater;
-import android.support.v4.view.GestureDetectorCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -26,13 +21,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import edu.pokemon.iut.pokedex.PokedexApp;
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.BaseFragment;
-import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 import edu.pokemon.iut.pokedex.architecture.listener.PokemonGestureListener;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
 import edu.pokemon.iut.pokedex.data.model.Type;
@@ -47,12 +39,6 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     private static final String KEY_POKEMON_ID = "KEY_POKEMON_ID";
     private static final String KEY_TRANSITION_NAME = "KEY_TRANSITION_NAME";
     private static final String KEY_SHOW_NAVIGATION = "KEY_SHOW_NAVIGATION";
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-    PokemonViewModel viewModel;
-    @Inject
-    public NavigationManager navigationManager;
-
     @BindView(R.id.cl_pokemon_detail)
     View constraintLayoutPokemonDetail;
     @BindView(R.id.iv_pokemon_logo)
@@ -69,7 +55,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     TextView textViewPokemonWeight;
     @BindView(R.id.ll_pokemon_types)
     LinearLayout linearLayoutpokemonTypes;
-
+    private PokemonViewModel viewModel;
     private int pokemonId;
     private View mRootView;
     private boolean isNavigationShown = true;
@@ -80,10 +66,12 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
      */
     public static PokemonDetailFragment newInstance(int pokemonId, String transitionName, boolean isNavigationShown) {
         PokemonDetailFragment pokemonDetailFragment = new PokemonDetailFragment();
+
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_POKEMON_ID, pokemonId);
         bundle.putString(KEY_TRANSITION_NAME, transitionName);
         bundle.putBoolean(KEY_SHOW_NAVIGATION, isNavigationShown);
+
         pokemonDetailFragment.setArguments(bundle);
         return pokemonDetailFragment;
     }
@@ -133,14 +121,14 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
         }
 
         if (isNavigationShown) {
-            PokemonGestureListener pokemonGestureListener = new PokemonGestureListener(this,null,this.getContext());
+            PokemonGestureListener pokemonGestureListener = new PokemonGestureListener(this, null, this.getContext());
             constraintLayoutPokemonDetail.setOnTouchListener(pokemonGestureListener);
         }
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
         viewModel.init(this.pokemonId);
         viewModel.getPokemon().observe(this, this::initView);
-        viewModel.getIdMaxPokemon().observe(this, integer -> idMaxPokemon = integer!=null?integer:0);
+        viewModel.getIdMaxPokemon().observe(this, integer -> idMaxPokemon = integer != null ? integer : 0);
     }
 
     private void initView(Pokemon pokemon) {
@@ -184,13 +172,13 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
 
     @Override
     public void onSwipe(int direction) {
-        if(direction == PokemonGestureListener.LEFT){
-            if(pokemonId != 1) {
+        if (direction == PokemonGestureListener.LEFT) {
+            if (pokemonId != 1) {
                 navigationManager.startPokemonDetail(pokemonId - 1, imageViewPokemonLogo, true);
             }
-        }else if (direction == PokemonGestureListener.RIGHT){
-            if(pokemonId != idMaxPokemon){
-                navigationManager.startPokemonDetail(pokemonId + 1, imageViewPokemonLogo,true);
+        } else if (direction == PokemonGestureListener.RIGHT) {
+            if (pokemonId != idMaxPokemon) {
+                navigationManager.startPokemonDetail(pokemonId + 1, imageViewPokemonLogo, true);
             }
         }
     }

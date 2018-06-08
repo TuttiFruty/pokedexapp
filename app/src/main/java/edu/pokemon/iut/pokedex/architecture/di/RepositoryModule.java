@@ -13,6 +13,7 @@ import edu.pokemon.iut.pokedex.data.repository.PokemonRepositoryImpl;
 public abstract class RepositoryModule {
     /**
      * Main repository to access distant services and database of pokemon
+     *
      * @param pokemonRepositoryImpl an actual implementation of {@link PokemonRepository} interface
      * @return an interface of {@link PokemonRepository} who refers to the param.
      */

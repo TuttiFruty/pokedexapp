@@ -7,46 +7,44 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
+import javax.inject.Singleton;
+
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonDetailFragment;
 import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
 
 /**
  * Helper class to ease the navigation between screens.
- * Created by becze on 9/30/2015.
  */
+@Singleton
 public class NavigationManager {
+    //Allow to know if we the app is launch in a tablet or big screen allow
     private boolean tabletNavigation;
+    //Allow to know if we navigate through the app with swipe
     private boolean isSwipe = false;
 
-    public void setTabletNavigation(boolean tabletNavigation) {
-        this.tabletNavigation = tabletNavigation;
-    }
+    private FragmentManager mFragmentManager;
+    private NavigationListener mNavigationListener;
 
+    /**
+     * @return true if we are on Tablet/BigScreen, false otherwise
+     */
     public boolean isTabletNavigation() {
         return tabletNavigation;
     }
 
     /**
-     * Listener interface for navigation events.
+     * @param tabletNavigation Set with true if the app is on Tablet/BigScreen, false otherwise
      */
-    public interface NavigationListener {
-
-        /**
-         * Callback on backstack changed.
-         */
-        void onBackstackChanged();
+    public void setTabletNavigation(boolean tabletNavigation) {
+        this.tabletNavigation = tabletNavigation;
     }
-
-    private FragmentManager mFragmentManager;
-
-    private NavigationListener mNavigationListener;
 
     /**
      * Initialize the NavigationManager with a FragmentManager, which will be used at the
      * fragment transactions.
      *
-     * @param fragmentManager
+     * @param fragmentManager provide by the activity
      */
     public void init(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
@@ -58,42 +56,44 @@ public class NavigationManager {
     }
 
     /**
-     * Displays the next fragment
-     * @param fragment
-     * @param sharedElement
-     * @param isRoot
+     * Displays the next fragment<br>
+     * The parameter isRoot allow the NavigationManager to pop all the current backstack<br>
+     *
+     * @param fragment      which fragment we want to show
+     * @param sharedElement any view that is shared between the current fragment and the new one
+     * @param isRoot        true if the new fragment must considered as root of the application
      */
     private void open(Fragment fragment, View sharedElement, boolean isRoot) {
         if (mFragmentManager != null) {
-            //@formatter:off
-            int idContainer = isTabletNavigation() && !isRoot?R.id.detail_container:R.id.main_container;
+            //If we are on tablet navigation we can show both list and detail on the same screen if not we always show on the main_container
+            int idContainer = isTabletNavigation() && !isRoot ? R.id.detail_container : R.id.main_container;
 
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-            if(sharedElement != null){
+            //In cas we have common view on old and new fragment, we add it to the transaction
+            if (sharedElement != null) {
                 fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
 
-            if(!isTabletNavigation() || isRoot){
+            //If we are on tablet or we are not the root we dont need to add the fragment to the backstack
+            if (!isTabletNavigation() || isRoot) {
                 fragmentTransaction.addToBackStack(fragment.toString());
             }
 
-            fragmentTransaction.replace(idContainer,fragment).commit();
-            //@formatter:on
+            fragmentTransaction.replace(idContainer, fragment).commit();
         }
     }
 
     /**
      * pops every fragment and starts the given fragment as a new one.
      *
-     * @param fragment
-     * @param sharedElement
+     * @param fragment      which fragment we want to show
+     * @param sharedElement any view that is shared between the current fragment and the new one
      */
     private void openAsRoot(Fragment fragment, View sharedElement) {
         popEveryFragment();
         open(fragment, sharedElement, true);
     }
-
 
     /**
      * Pops all the queued fragments
@@ -112,15 +112,16 @@ public class NavigationManager {
     }
 
     /**
-     * Navigates back by popping teh back stack. If there is no more items left we finish the current activity.
+     * Navigates back by popping the back stack. If there is no more items left we finish the current activity.<br>
+     * In case of swipe navigation we start de main fragment.
      *
-     * @param baseActivity
+     * @param baseActivity activity to finish in case of backstack empty
      */
     public void navigateBack(Activity baseActivity) {
-
-        if(isSwipe){
+        if (isSwipe) {
+            isSwipe = false;
             startPokemonList(null, null);
-        }else {
+        } else {
             if (mFragmentManager.getBackStackEntryCount() == 0) {
                 // we can finish the base activity since we have no other fragments
                 baseActivity.finish();
@@ -130,11 +131,28 @@ public class NavigationManager {
         }
     }
 
+
+    /**
+     * Start the pokemon list fragment.<br>
+     * We can pass it a View as a shared element between fragments.<br>
+     * Also a query can be used to filter the list shown<br>
+     *
+     * @param sharedElement {@link View} shared betweem both fragments
+     * @param query         {@link CharSequence} that filter the list
+     */
     public void startPokemonList(View sharedElement, CharSequence query) {
         Fragment fragment = PokemonListFragment.newInstance(query);
         openAsRoot(fragment, sharedElement);
     }
 
+    /**
+     * Start the pokemon detail view for the pokemonId<br>
+     * We can pass it a View as a shared element between fragments.<br>
+     *
+     * @param pokemonId     the pokemon id to show
+     * @param sharedElement {@link View} shared betweem both fragments
+     * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
+     */
     public void startPokemonDetail(int pokemonId, View sharedElement, boolean isSwipe) {
         this.isSwipe = isSwipe;
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement), !isTabletNavigation());
@@ -148,11 +166,18 @@ public class NavigationManager {
         return mFragmentManager.getBackStackEntryCount() <= 1;
     }
 
-    public NavigationListener getNavigationListener() {
-        return mNavigationListener;
-    }
-
     public void setNavigationListener(NavigationListener navigationListener) {
         mNavigationListener = navigationListener;
+    }
+
+    /**
+     * Listener interface for navigation events.
+     */
+    public interface NavigationListener {
+
+        /**
+         * Callback on backstack changed.
+         */
+        void onBackstackChanged();
     }
 }

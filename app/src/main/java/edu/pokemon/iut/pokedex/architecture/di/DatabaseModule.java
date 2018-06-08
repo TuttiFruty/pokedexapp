@@ -20,6 +20,7 @@ public class DatabaseModule {
 
     /**
      * Constructor of the module called by Dagger to provide the context
+     *
      * @param context used to build the database
      */
     public DatabaseModule(Context context) {
@@ -28,6 +29,7 @@ public class DatabaseModule {
 
     /**
      * Allow the use of the database of Pokemon
+     *
      * @return an instance of {@link PokedexDatabase}
      */
     @Provides
@@ -40,6 +42,7 @@ public class DatabaseModule {
 
     /**
      * Allow the use of the {@link PokemonDao} to access the database through database request
+     *
      * @param pokedexDatabase wich we want to access
      * @return an instance of {@link PokemonDao}
      */

@@ -14,16 +14,10 @@ import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 
 public class NavigationActivity extends BaseActivity implements NavigationManager.NavigationListener {
 
-    @Inject
-    public NavigationManager mNavigationManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
-        // Inject members
-        PokedexApp.app().component().inject(this);
 
         // Initialize the NavigationManager with this activity's FragmentManager
         mNavigationManager.init(getSupportFragmentManager());

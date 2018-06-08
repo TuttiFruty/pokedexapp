@@ -6,10 +6,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
-import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonViewModel;
-import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListViewModel;
 import edu.pokemon.iut.pokedex.architecture.viewmodel.ViewModelFactory;
 import edu.pokemon.iut.pokedex.architecture.viewmodel.ViewModelKey;
+import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonViewModel;
+import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListViewModel;
 
 /**
  * Dependencies injection Module for accessing the ViewModel objects for the app
@@ -20,15 +20,17 @@ public abstract class ViewModelModule {
 
     /**
      * Main factory to construct viewModel with non empty constructor.
+     *
      * @param viewModelFactory an actual implementation of {@link ViewModelProvider.Factory} interface
      * @return an interface of {@link ViewModelProvider.Factory} who refers to the param.
      */
     @Binds
-    abstract ViewModelProvider.Factory bindsViewModelFacotry (ViewModelFactory viewModelFactory);
+    abstract ViewModelProvider.Factory bindsViewModelFacotry(ViewModelFactory viewModelFactory);
 
 
     /**
      * Returns a ViewModel to manipulate a list of Pokemon
+     *
      * @param pokemonListViewModel actual implementation of abtract class {@link ViewModel}
      * @return an instance of abstract class {@link ViewModel}
      */
@@ -39,6 +41,7 @@ public abstract class ViewModelModule {
 
     /**
      * Returns a ViewModel to manipulate a single Pokemon
+     *
      * @param pokemonViewModel actual implementation of abtract class {@link ViewModel}
      * @return an instance of abstract class {@link ViewModel}
      */
