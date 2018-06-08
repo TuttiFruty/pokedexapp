@@ -183,7 +183,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     }
 
     @Override
-    public void onFling(int direction) {
+    public void onSwipe(int direction) {
         if(direction == PokemonGestureListener.LEFT){
             if(pokemonId != 1) {
                 navigationManager.startPokemonDetail(pokemonId - 1, imageViewPokemonLogo, true);
