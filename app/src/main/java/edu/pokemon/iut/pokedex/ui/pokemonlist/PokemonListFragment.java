@@ -19,19 +19,24 @@ import edu.pokemon.iut.pokedex.architecture.BaseFragment;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
 
 /**
- * Example Fragment
- * Created by becze on 11/25/2015.
+ * Fragment to show a List of Pokemon
  */
 @SuppressWarnings("WeakerAccess")
 public class PokemonListFragment extends BaseFragment implements PokemonAdapter.CaptureListener {
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
+
+    /* BUNDLE KEYS */
     private static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
+
+    /* VIEWS */
     @BindView(R.id.rv_pokemon_list)
     protected RecyclerView pokemonListView;
+
+    /* ATTRIBUTS */
     private PokemonListViewModel viewModel;
-    private PokemonAdapter mAdapter;
-    private View mRootView;
+    private PokemonAdapter adapter;
+    private View rootView;
 
     /**
      * @param query to filter the pokemon list
@@ -51,11 +56,11 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mRootView == null) {
-            mRootView = inflater.inflate(R.layout.pokemon_list_layout, null);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.pokemon_list_layout, null);
         }
 
-        return mRootView;
+        return rootView;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         // in content do not change the layout size of the RecyclerView
         pokemonListView.setHasFixedSize(true);
 
-        // use a linear layout manager
+        // use a linear layout manager if in portrait or a grid layout manager in landscape or tablet view
         int orientation = Configuration.ORIENTATION_PORTRAIT;
         if(getActivity() != null && getActivity().getResources() != null) {
             orientation = getActivity().getResources().getConfiguration().orientation;
@@ -75,6 +80,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             mLayoutManager = new LinearLayoutManager(getContext());
         } else {
+            //We change the number of columns shown if we are or not on a tablet
             if (navigationManager.isTabletNavigation()) {
                 mLayoutManager = new GridLayoutManager(getContext(), 2);
             } else {
@@ -82,13 +88,15 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
 
             }
         }
-
         pokemonListView.setLayoutManager(mLayoutManager);
-        mAdapter = new PokemonAdapter(getContext(), navigationManager, this);
-        pokemonListView.setAdapter(mAdapter);
+
+        adapter = new PokemonAdapter(getContext(), navigationManager, this);
+        pokemonListView.setAdapter(adapter);
         if(pokemonListView.getAdapter() != null) {
             pokemonListView.getAdapter().notifyDataSetChanged();
         }
+
+        //Initialisation and observation of the ViewModel for this screen
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
         CharSequence query = null;
         if (getArguments() != null) {
@@ -96,10 +104,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         }
         viewModel.init(query);
 
-        viewModel.getPokemons().observe(this, pokemonList -> {
-            // specify an adapter (see also next example)
-            mAdapter.setData(pokemonList);
-        });
+        viewModel.getPokemons().observe(this, pokemonList -> adapter.setData(pokemonList));
 
     }
 

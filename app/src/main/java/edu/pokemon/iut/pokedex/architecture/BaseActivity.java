@@ -24,7 +24,7 @@ import edu.pokemon.iut.pokedex.R;
 public class BaseActivity extends AppCompatActivity {
 
     @Inject
-    protected NavigationManager mNavigationManager;
+    protected NavigationManager navigationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mNavigationManager.navigateBack(this);
+        this.navigationManager.navigateBack(this);
     }
 
 }

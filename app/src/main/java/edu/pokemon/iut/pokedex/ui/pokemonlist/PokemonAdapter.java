@@ -19,13 +19,16 @@ import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
 
+/**
+ * Custom adapter to show each pokemon in a single line view
+ */
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder> {
     private final Context context;
     private final NavigationManager navigationManager;
-    private List<Pokemon> mDataset;
     private final CaptureListener captureListener;
+    private List<Pokemon> dataSet;
 
-    public PokemonAdapter(Context context, NavigationManager navigationManager, CaptureListener captureListener) {
+    PokemonAdapter(Context context, NavigationManager navigationManager, CaptureListener captureListener) {
         this.context = context;
         this.navigationManager = navigationManager;
         this.captureListener = captureListener;
@@ -44,10 +47,12 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Pokemon pokemon = mDataset.get(position);
+        /* Mapping of the data into the view*/
+        Pokemon pokemon = dataSet.get(position);
         holder.pokemonNumber.setText(context.getString(R.string.number, pokemon.getId()));
         holder.pokemonName.setText(pokemon.getName());
 
+        //If the pokemon is captured we use the full pokeball, otherwise the empty one
         holder.pokemonCapture.setImageResource(pokemon.isCapture() ? R.drawable.ic_launcher_pokeball : R.drawable.ic_launcher_pokeball_empty);
 
         RequestOptions options = new RequestOptions()
@@ -57,22 +62,25 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                 .apply(options)
                 .into(holder.pokemonLogo);
 
+        //Preparation for the transition animation between fragments
         ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName());
+
+        /* Init of the listeners */
         holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), holder.pokemonLogo, false));
         holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon.capture()));
     }
 
     @Override
     public int getItemCount() {
-        if (mDataset != null) {
-            return mDataset.size();
+        if (dataSet != null) {
+            return dataSet.size();
         } else {
             return 0;
         }
     }
 
     public void setData(List<Pokemon> data) {
-        this.mDataset = data;
+        this.dataSet = data;
         notifyDataSetChanged();
     }
 
@@ -80,8 +88,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         void onCapture(Pokemon pokemon);
     }
 
+    /**
+     * Inner ViewHolder for the Pokemon's view
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         final TextView pokemonName;
         final TextView pokemonNumber;
         final ImageView pokemonLogo;

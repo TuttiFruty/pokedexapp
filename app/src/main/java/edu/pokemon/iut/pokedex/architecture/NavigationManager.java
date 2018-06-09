@@ -23,8 +23,8 @@ public class NavigationManager {
     //Allow to know if we navigate through the app with swipe
     private boolean isSwipe = false;
 
-    private FragmentManager mFragmentManager;
-    private NavigationListener mNavigationListener;
+    private FragmentManager fragmentManager;
+    private NavigationListener navigationListener;
 
     /**
      * @return true if we are on Tablet/BigScreen, false otherwise
@@ -47,10 +47,10 @@ public class NavigationManager {
      * @param fragmentManager provide by the activity
      */
     public void init(FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
-        mFragmentManager.addOnBackStackChangedListener(() -> {
-            if (mNavigationListener != null) {
-                mNavigationListener.onBackstackChanged();
+        this.fragmentManager = fragmentManager;
+        this.fragmentManager.addOnBackStackChangedListener(() -> {
+            if (this.navigationListener != null) {
+                this.navigationListener.onBackstackChanged();
             }
         });
     }
@@ -64,11 +64,11 @@ public class NavigationManager {
      * @param isRoot        true if the new fragment must considered as root of the application
      */
     private void open(Fragment fragment, View sharedElement, boolean isRoot) {
-        if (mFragmentManager != null) {
+        if (this.fragmentManager != null) {
             //If we are on tablet navigation we can show both list and detail on the same screen if not we always show on the main_container
             int idContainer = isTabletNavigation() && !isRoot ? R.id.detail_container : R.id.main_container;
 
-            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
 
             //In cas we have common view on old and new fragment, we add it to the transaction
             if (sharedElement != null) {
@@ -103,13 +103,13 @@ public class NavigationManager {
      */
     private void popEveryFragment() {
         // Clear all back stack.
-        int backStackCount = mFragmentManager.getBackStackEntryCount();
+        int backStackCount = this.fragmentManager.getBackStackEntryCount();
         for (int i = 0; i < backStackCount; i++) {
 
             // Get the back stack fragment id.
-            int backStackId = mFragmentManager.getBackStackEntryAt(i).getId();
+            int backStackId = this.fragmentManager.getBackStackEntryAt(i).getId();
 
-            mFragmentManager.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            this.fragmentManager.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         }
     }
@@ -125,11 +125,11 @@ public class NavigationManager {
             isSwipe = false;
             startPokemonList(null, null);
         } else {
-            if (mFragmentManager.getBackStackEntryCount() == 0) {
+            if (this.fragmentManager.getBackStackEntryCount() == 0) {
                 // we can finish the base activity since we have no other fragments
                 baseActivity.finish();
             } else {
-                mFragmentManager.popBackStackImmediate();
+                this.fragmentManager.popBackStackImmediate();
             }
         }
     }
@@ -166,11 +166,11 @@ public class NavigationManager {
      * @return true if the current fragment displayed is a root fragment
      */
     public boolean isRootFragmentVisible() {
-        return mFragmentManager.getBackStackEntryCount() <= 1;
+        return this.fragmentManager.getBackStackEntryCount() <= 1;
     }
 
     public void setNavigationListener(NavigationListener navigationListener) {
-        mNavigationListener = navigationListener;
+        this.navigationListener = navigationListener;
     }
 
     /**

@@ -10,6 +10,9 @@ import android.view.View;
 import edu.pokemon.iut.pokedex.architecture.BaseActivity;
 import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 
+/**
+ * Main activity of the App, it will control all the navigation for the app.
+ */
 public class NavigationActivity extends BaseActivity implements NavigationManager.NavigationListener {
 
     @Override
@@ -18,15 +21,16 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         setContentView(R.layout.activity_navigation);
 
         // Initialize the NavigationManager with this activity's FragmentManager
-        mNavigationManager.init(getSupportFragmentManager());
-        mNavigationManager.setNavigationListener(this);
+        this.navigationManager.init(getSupportFragmentManager());
+        this.navigationManager.setNavigationListener(this);
 
         View detailsFrame = findViewById(R.id.detail_container);
-        mNavigationManager.setTabletNavigation(detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE);
+        //If the R.layout.activity_navigation contains a detail_container we know we are on a Tablet/BigScreen
+        this.navigationManager.setTabletNavigation(detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE);
 
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
         if (savedInstanceState == null) {
-            mNavigationManager.startPokemonList(null, null);
+            this.navigationManager.startPokemonList(null, null);
         }
     }
 
@@ -40,7 +44,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
             // we have only one fragment left so we would close the application with this back
             showExitDialog();
         } else {
-            mNavigationManager.navigateBack(this);
+            this.navigationManager.navigateBack(this);
         }
     }
 
@@ -58,7 +62,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
     @Override
     public void onBackstackChanged() {
         // check if we display a root fragment and enable drawer only on root fragments
-        boolean rootFragment = mNavigationManager.isRootFragmentVisible();
+        boolean rootFragment = this.navigationManager.isRootFragmentVisible();
     }
 
     @Override
@@ -71,13 +75,13 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mNavigationManager.startPokemonList(null, query);
+                NavigationActivity.this.navigationManager.startPokemonList(null, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mNavigationManager.startPokemonList(null, newText);
+                NavigationActivity.this.navigationManager.startPokemonList(null, newText);
                 return false;
             }
         });

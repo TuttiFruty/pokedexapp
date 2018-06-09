@@ -7,6 +7,9 @@ import edu.pokemon.iut.pokedex.architecture.di.DaggerPokemonComponent;
 import edu.pokemon.iut.pokedex.architecture.di.DatabaseModule;
 import edu.pokemon.iut.pokedex.architecture.di.PokemonComponent;
 
+/**
+ * Core for the Dagger Depedency injections, and Database migration
+ */
 public class PokedexApp extends Application {
 
     private PokemonComponent pokemonComponent;
@@ -28,7 +31,7 @@ public class PokedexApp extends Application {
         return application;
     }
 
-    //permet aux activités via .getApplication().appComponent() de récupérer le AppComponent
+    //allows activities to retrieve AppComponent thanks to .getApplication().appComponent()
     public PokemonComponent component() {
         return pokemonComponent;
     }
