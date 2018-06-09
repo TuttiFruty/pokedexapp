@@ -15,6 +15,7 @@ import android.view.View;
  * {@value #LEFT} Swipe from Right to Left<br>
  * {@value #RIGHT} Swipe from Left to Right<br>
  */
+@SuppressWarnings("WeakerAccess")
 public class PokemonGestureListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
     //The for direction detected
     public static final int UP = 1;
@@ -28,9 +29,9 @@ public class PokemonGestureListener extends GestureDetector.SimpleOnGestureListe
     private static final float SWIPE_MIN_DISTANCE = 120;
 
     //The interface that allow the caller to have a callback of the swipe
-    private Listener listener;
+    private final Listener listener;
 
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
 
     /**
      * Constructor for the {@link GestureDetector.SimpleOnGestureListener}

@@ -1,10 +1,12 @@
 package edu.pokemon.iut.pokedex.ui.pokemondetail;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ import edu.pokemon.iut.pokedex.data.model.Type;
  * Example Fragment
  * Created by becze on 11/25/2015.
  */
+@SuppressWarnings("WeakerAccess")
 public class PokemonDetailFragment extends BaseFragment implements PokemonGestureListener.Listener {
 
     private static final String TAG = PokemonDetailFragment.class.getSimpleName();
@@ -40,22 +43,21 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     private static final String KEY_TRANSITION_NAME = "KEY_TRANSITION_NAME";
     private static final String KEY_SHOW_NAVIGATION = "KEY_SHOW_NAVIGATION";
     @BindView(R.id.cl_pokemon_detail)
-    View constraintLayoutPokemonDetail;
+    protected View constraintLayoutPokemonDetail;
     @BindView(R.id.iv_pokemon_logo)
-    ImageView imageViewPokemonLogo;
+    protected ImageView imageViewPokemonLogo;
     @BindView(R.id.tv_pokemon_numero)
-    TextView textViewPokemonId;
+    protected TextView textViewPokemonId;
     @BindView(R.id.tv_pokemon_name)
-    TextView textViewPokemonName;
+    protected TextView textViewPokemonName;
     @BindView(R.id.tv_pokemon_base_exp)
-    TextView textViewPokemonBaseExp;
+    protected TextView textViewPokemonBaseExp;
     @BindView(R.id.tv_pokemon_height)
-    TextView textViewPokemonHeight;
+    protected TextView textViewPokemonHeight;
     @BindView(R.id.tv_pokemon_weight)
-    TextView textViewPokemonWeight;
+    protected TextView textViewPokemonWeight;
     @BindView(R.id.ll_pokemon_types)
-    LinearLayout linearLayoutpokemonTypes;
-    private PokemonViewModel viewModel;
+    protected LinearLayout linearLayoutpokemonTypes;
     private int pokemonId;
     private View mRootView;
     private boolean isNavigationShown = true;
@@ -94,9 +96,10 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
         }
     }
 
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mRootView == null) {
             mRootView = inflater.inflate(R.layout.pokemon_detail_layout, null);
         }
@@ -104,7 +107,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         String transitionName = "NO_TRANSITION";
@@ -125,7 +128,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
             constraintLayoutPokemonDetail.setOnTouchListener(pokemonGestureListener);
         }
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
+        PokemonViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
         viewModel.init(this.pokemonId);
         viewModel.getPokemon().observe(this, this::initView);
         viewModel.getIdMaxPokemon().observe(this, integer -> idMaxPokemon = integer != null ? integer : 0);
@@ -135,31 +138,33 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .dontAnimate();
-        Glide.with(getContext())
-                .load(pokemon.getSpritesString())
-                .apply(options)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        startPostponedEnterTransition();
-                        return false;
-                    }
+        if(getContext() != null) {
+            Glide.with(getContext())
+                    .load(pokemon.getSpritesString())
+                    .apply(options)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            startPostponedEnterTransition();
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        startPostponedEnterTransition();
-                        return false;
-                    }
-                })
-                .into(imageViewPokemonLogo);
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            startPostponedEnterTransition();
+                            return false;
+                        }
+                    })
+                    .into(imageViewPokemonLogo);
+        }
 
         setTitle(isNavigationShown ? pokemon.getName() : null);
 
-        textViewPokemonId.setText("No. " + pokemon.getStringId());
+        textViewPokemonId.setText(getString(R.string.number, pokemon.getId()));
         textViewPokemonName.setText(pokemon.getName());
-        textViewPokemonBaseExp.setText(pokemon.getStringBaseExp() + " exp");
-        textViewPokemonHeight.setText(pokemon.getStringHeight() + " m");
-        textViewPokemonWeight.setText(pokemon.getStringWeight() + " kg");
+        textViewPokemonBaseExp.setText(getString(R.string.exp, pokemon.getBaseExperience()));
+        textViewPokemonHeight.setText(getString(R.string.height, pokemon.getHeight()));
+        textViewPokemonWeight.setText(getString(R.string.weight, pokemon.getWeight()));
 
         linearLayoutpokemonTypes.removeAllViews();
         for (Type type : pokemon.getTypes()) {

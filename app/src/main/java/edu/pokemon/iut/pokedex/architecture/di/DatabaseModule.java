@@ -16,7 +16,7 @@ import edu.pokemon.iut.pokedex.data.database.PokedexDatabase;
 @Module
 public class DatabaseModule {
     // The context is used to build the database
-    Context context;
+    private final Context context;
 
     /**
      * Constructor of the module called by Dagger to provide the context

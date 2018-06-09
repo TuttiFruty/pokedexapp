@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import javax.inject.Inject;
-
 import edu.pokemon.iut.pokedex.architecture.BaseActivity;
 import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 
@@ -27,7 +25,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         mNavigationManager.setTabletNavigation(detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE);
 
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             mNavigationManager.startPokemonList(null, null);
         }
     }
@@ -49,7 +47,7 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
     /**
      * Shows the logout dialog. Stops the service and finishes the application.
      */
-    protected void showExitDialog() {
+    private void showExitDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(R.string.exit_message).setCancelable(false).setPositiveButton(android.R.string.yes,
                 (dialog, id) -> finish()).setNegativeButton(android.R.string.cancel, null);
@@ -73,13 +71,13 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mNavigationManager.startPokemonList(null,query);
+                mNavigationManager.startPokemonList(null, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mNavigationManager.startPokemonList(null,newText);
+                mNavigationManager.startPokemonList(null, newText);
                 return false;
             }
         });

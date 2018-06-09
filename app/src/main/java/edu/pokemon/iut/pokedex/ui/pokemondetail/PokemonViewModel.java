@@ -11,8 +11,8 @@ import edu.pokemon.iut.pokedex.data.repository.PokemonRepository;
 public class PokemonViewModel extends ViewModel {
 
     private final PokemonRepository pokemonRepository;
-    LiveData<Pokemon> pokemon;
-    LiveData<Integer> idMaxPokemon;
+    private LiveData<Pokemon> pokemon;
+    private LiveData<Integer> idMaxPokemon;
 
     @Inject
     public PokemonViewModel(PokemonRepository pokemonRepository){

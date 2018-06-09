@@ -72,7 +72,10 @@ public class NavigationManager {
 
             //In cas we have common view on old and new fragment, we add it to the transaction
             if (sharedElement != null) {
-                fragmentTransaction.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
+                String transition = ViewCompat.getTransitionName(sharedElement);
+                if(transition != null) {
+                    fragmentTransaction.addSharedElement(sharedElement, transition);
+                }
             }
 
             //If we are on tablet or we are not the root we dont need to add the fragment to the backstack

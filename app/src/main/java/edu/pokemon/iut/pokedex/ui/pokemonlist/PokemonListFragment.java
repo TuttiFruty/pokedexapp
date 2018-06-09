@@ -1,8 +1,10 @@
 package edu.pokemon.iut.pokedex.ui.pokemonlist;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,19 +22,19 @@ import edu.pokemon.iut.pokedex.data.model.Pokemon;
  * Example Fragment
  * Created by becze on 11/25/2015.
  */
+@SuppressWarnings("WeakerAccess")
 public class PokemonListFragment extends BaseFragment implements PokemonAdapter.CaptureListener {
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
     private static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
     @BindView(R.id.rv_pokemon_list)
-    RecyclerView pokemonListView;
+    protected RecyclerView pokemonListView;
     private PokemonListViewModel viewModel;
-    private LinearLayoutManager mLayoutManager;
     private PokemonAdapter mAdapter;
     private View mRootView;
 
     /**
-     * @param query
+     * @param query to filter the pokemon list
      * @return newInstance of SampleFragment
      */
     public static PokemonListFragment newInstance(CharSequence query) {
@@ -45,14 +47,10 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         return pokemonListFragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mRootView == null) {
             mRootView = inflater.inflate(R.layout.pokemon_list_layout, null);
         }
@@ -61,7 +59,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initActionBar(false, null);
         // use this setting to improve performance if you know that changes
@@ -69,8 +67,11 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         pokemonListView.setHasFixedSize(true);
 
         // use a linear layout manager
-        int orientation = getActivity().getResources().getConfiguration().orientation;
-
+        int orientation = Configuration.ORIENTATION_PORTRAIT;
+        if(getActivity() != null && getActivity().getResources() != null) {
+            orientation = getActivity().getResources().getConfiguration().orientation;
+        }
+        LinearLayoutManager mLayoutManager;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             mLayoutManager = new LinearLayoutManager(getContext());
         } else {
@@ -85,8 +86,9 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         pokemonListView.setLayoutManager(mLayoutManager);
         mAdapter = new PokemonAdapter(getContext(), navigationManager, this);
         pokemonListView.setAdapter(mAdapter);
-        pokemonListView.getAdapter().notifyDataSetChanged();
-
+        if(pokemonListView.getAdapter() != null) {
+            pokemonListView.getAdapter().notifyDataSetChanged();
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
         CharSequence query = null;
         if (getArguments() != null) {

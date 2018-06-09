@@ -9,8 +9,8 @@ import edu.pokemon.iut.pokedex.architecture.di.PokemonComponent;
 
 public class PokedexApp extends Application {
 
-    protected PokemonComponent pokemonComponent;
-    protected static PokedexApp application;
+    private PokemonComponent pokemonComponent;
+    private static PokedexApp application;
 
     @Override
     public void onCreate() {

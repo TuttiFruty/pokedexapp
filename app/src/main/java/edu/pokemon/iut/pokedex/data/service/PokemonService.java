@@ -1,80 +1,70 @@
 package edu.pokemon.iut.pokedex.data.service;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
-import edu.pokemon.iut.pokedex.data.model.Type;
 import edu.pokemon.iut.pokedex.data.webservice.PokemonApi;
 import edu.pokemon.iut.pokedex.data.webservice.PokemonApiClient;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This class give access to a service that return information about {@link Pokemon} <br>
+ * It abstract the source thanks to {@link PokemonApiClient} <br>
+ * The only condition is to respect the {@link Pokemon} contract for {@link com.google.gson.Gson} automatic transformation.
+ */
 public class PokemonService {
-    private PokemonApi pokemonApi;
+    private static final String TAG = PokemonService.class.getSimpleName();
+    private final PokemonApi pokemonApi;
 
+    /**
+     * Dagger injects the parameter automatically<br>
+     * {@link PokemonApiClient} give access to the data source out-app
+     *
+     * @param pokemonApiClient {@link PokemonApiClient} abstract the external services which provides Pokemon data
+     */
+    @SuppressWarnings("WeakerAccess")
     @Inject
-    public PokemonService(PokemonApiClient pokemonApiClient) {
+    protected PokemonService(PokemonApiClient pokemonApiClient) {
         pokemonApi = pokemonApiClient.getPokemonApi();
     }
 
+    /**
+     * Call the {@link PokemonApiClient} to retrieve one pokemon
+     *
+     * @param pokemonId of the pokemon to retrieve
+     * @return {@link Pokemon} from the api
+     */
     public Pokemon getPokemon(int pokemonId) {
-        // refresh the data
         Response<Pokemon> response = null;
         try {
+            //Execute directly the request
             response = pokemonApi.getPokemon(pokemonId).execute();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
         }
 
-            Pokemon pokemon = null;
+        Pokemon pokemon = null;
+        //Mapping the response in a new instance of Pokemon
         if (response != null && response.body() != null) {
-            pokemon =  new Pokemon();
-            pokemon.setName(response.body().getName());
-            pokemon.setWeight(response.body().getWeight());
-            pokemon.setHeight(response.body().getHeight());
-            pokemon.setId(response.body().getId());
-            pokemon.setBaseExperience(response.body().getBaseExperience());
-            pokemon.setDefault(response.body().isDefault());
-            pokemon.setOrder(response.body().getOrder());
-            pokemon.setSprites(response.body().getSprites());
+            pokemon = new Pokemon();
+            pokemon.setName(Objects.requireNonNull(response.body()).getName());
+            pokemon.setWeight(Objects.requireNonNull(response.body()).getWeight());
+            pokemon.setHeight(Objects.requireNonNull(response.body()).getHeight());
+            pokemon.setId(Objects.requireNonNull(response.body()).getId());
+            pokemon.setBaseExperience(Objects.requireNonNull(response.body()).getBaseExperience());
+            pokemon.setDefault(Objects.requireNonNull(response.body()).isDefault());
+            pokemon.setOrder(Objects.requireNonNull(response.body()).getOrder());
+            pokemon.setSprites(Objects.requireNonNull(response.body()).getSprites());
             pokemon.getSprites().setId(pokemon.getId());
             pokemon.setSpritesString(pokemon.getSprites().getFrontDefault());
-            pokemon.setTypes(response.body().getTypes());
+            pokemon.setTypes(Objects.requireNonNull(response.body()).getTypes());
         }
 
         return pokemon;
-    }
-
-    public MutableLiveData<List<Pokemon>> getPokemons(int from, int to) {
-        MutableLiveData<List<Pokemon>> data = new MutableLiveData<>();
-
-        final List<Pokemon> list = new ArrayList<>();
-
-        for(int i = from; i < to ; i++){
-            pokemonApi.getPokemon(i).enqueue(new Callback<Pokemon>() {
-                @Override
-                public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                    list.add(response.body());
-                    data.setValue(list);
-                }
-
-                @Override
-                public void onFailure(Call<Pokemon> call, Throwable t) {
-                    Log.e("PokemonRepository", "Error request : " + call.request().toString(), t);
-                }
-            });
-        }
-
-        data.setValue(list);
-
-        return data;
     }
 }

@@ -1,12 +1,15 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Pokedex</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="exit_message">Exit ?</string>
-    <string name="pokemon_logo_fragment_transition">pokemon_logo</string>
     <string name="action_search">Rechercher</string>
+    <string name="content_description">Image of the pokemon</string>
+    <string name="content_description_capture">Image of a Pokeball to capture a pokemon</string>
+    <string name="base_exp">BASE EXP</string>
+    <string name="ht">HT</string>
+    <string name="wt">WT</string>
+    <string name="types">TYPES</string>
+    <string name="number">No. %d</string>
+    <string name="exp" tools:ignore="PluralsCandidate">%d exp</string>
+    <string name="height">%d m</string>
+    <string name="weight">%d kg</string>
 </resources>

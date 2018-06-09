@@ -1,5 +1,6 @@
 package edu.pokemon.iut.pokedex.architecture;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,11 +20,11 @@ import edu.pokemon.iut.pokedex.R;
  * - The main content of the activity is set via setContentView on R.layout.activity_base<br>
  * - {@link ButterKnife} bind's all views on setContentView<br>
  */
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
-    public FrameLayout mContentLayout;
 
     @Inject
-    public NavigationManager mNavigationManager;
+    protected NavigationManager mNavigationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class BaseActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(view -> this.onBackPressed());
 
-        mContentLayout = findViewById(R.id.content);
+        FrameLayout mContentLayout = findViewById(R.id.content);
         // Get an inflater
         getLayoutInflater().inflate(layoutResID, mContentLayout);
         ButterKnife.bind(this);

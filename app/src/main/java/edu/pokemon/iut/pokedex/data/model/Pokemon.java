@@ -4,7 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import android.support.v4.math.MathUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -129,11 +128,11 @@ public class Pokemon {
     }
 
     public String getStringHeight() {
-        return Float.toString((float)this.height / 10);
+        return Float.toString((float) this.height / 10);
     }
 
     public String getStringWeight() {
-        return Float.toString((float)this.weight / 10);
+        return Float.toString((float) this.weight / 10);
     }
 
     public List<Type> getTypes() {
@@ -148,6 +147,7 @@ public class Pokemon {
         return isCapture;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setCapture(boolean capture) {
         isCapture = capture;
     }

@@ -9,6 +9,7 @@ import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 /**
  * Dependencies injection Module for Navigation
  */
+@SuppressWarnings("WeakerAccess")
 @Module
 public class NavigationModule {
 
