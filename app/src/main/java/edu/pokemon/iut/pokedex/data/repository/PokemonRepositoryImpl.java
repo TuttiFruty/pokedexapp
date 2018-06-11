@@ -21,6 +21,12 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     private final PokemonService pokemonService;
     private final PokemonDao pokemonDao;
     private final Executor executor;
+    private int maxIdPokemon = 251;
+
+    @Override
+    public void setMaxIdPokemon(int maxIdPokemon){
+        this.maxIdPokemon = maxIdPokemon;
+    }
 
     /**
      * Dagger inject all the needed parameters to instantiate the object.
@@ -39,7 +45,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     @Override
     public LiveData<List<Pokemon>> getPokemons(CharSequence query) {
         //For now we set the number of pokemon retrieve by hand.
-        refreshPokemon(1, 251);
+        refreshPokemon(1, maxIdPokemon);
 
         //If any query was passed we used the query to filter the results, else we retrieve all pokemon
         if (query != null) {

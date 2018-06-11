@@ -44,4 +44,11 @@ public interface PokemonRepository {
      * @return {@link LiveData<Integer>} to observe if any pokemon is added and updates the count
      */
     LiveData<Integer> getNumberOfPokemon();
+
+    /**
+     * Change the max pokemon we want
+     *
+     * @param maxIdPokemon we want
+     */
+    void setMaxIdPokemon(int maxIdPokemon);
 }

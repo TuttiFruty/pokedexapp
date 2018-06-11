@@ -2,6 +2,7 @@ package edu.pokemon.iut.pokedex.architecture.listener;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -111,5 +112,14 @@ public class PokemonGestureListener extends GestureDetector.SimpleOnGestureListe
          * @param direction an int from the constant.
          */
         void onSwipe(int direction);
+    }
+
+    /**
+     * Getter for testing purpose only
+     * @return {@link GestureDetector}
+     */
+    @VisibleForTesting
+    protected GestureDetector getGestureDetector(){
+        return gestureDetector;
     }
 }

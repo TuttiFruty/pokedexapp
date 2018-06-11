@@ -78,7 +78,7 @@ public class NavigationManager {
                 }
             }
 
-            //If we are on tablet or we are not the root we dont need to add the fragment to the backstack
+            //If we are on tablet or we are not the root we don't need to add the fragment to the backstack
             if (!isTabletNavigation() || isRoot) {
                 fragmentTransaction.addToBackStack(fragment.toString());
             }
@@ -140,7 +140,7 @@ public class NavigationManager {
      * We can pass it a View as a shared element between fragments.<br>
      * Also a query can be used to filter the list shown<br>
      *
-     * @param sharedElement {@link View} shared betweem both fragments
+     * @param sharedElement {@link View} shared between both fragments
      * @param query         {@link CharSequence} that filter the list
      */
     public void startPokemonList(View sharedElement, CharSequence query) {
@@ -153,7 +153,7 @@ public class NavigationManager {
      * We can pass it a View as a shared element between fragments.<br>
      *
      * @param pokemonId     the pokemon id to show
-     * @param sharedElement {@link View} shared betweem both fragments
+     * @param sharedElement {@link View} shared between both fragments
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
     public void startPokemonDetail(int pokemonId, View sharedElement, boolean isSwipe) {

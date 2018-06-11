@@ -60,9 +60,9 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     @BindView(R.id.tv_pokemon_weight)
     protected TextView textViewPokemonWeight;
     @BindView(R.id.ll_pokemon_types)
-    protected LinearLayout linearLayoutpokemonTypes;
+    protected LinearLayout linearLayoutPokemonTypes;
 
-    /* ATTRIBUTS */
+    /* ATTRIBUTES */
     private int pokemonId;
     private View rootView;
     private boolean isNavigationShown = true;
@@ -122,7 +122,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
 
         String transitionName = "NO_TRANSITION";
 
-        //Retrieve of the differents arguments passed when creating the instance
+        //Retrieve of the different arguments passed when creating the instance
         if (getArguments() != null) {
             isNavigationShown = getArguments().getBoolean(KEY_SHOW_NAVIGATION, true);
             transitionName = getArguments().getString(KEY_TRANSITION_NAME, "NO_TRANSITION");
@@ -157,62 +157,63 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
      * @param pokemon {@link Pokemon} to show
      */
     private void initView(Pokemon pokemon) {
-        //To be able to use the Shared element we need to disable animation from Glide
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .dontAnimate();
-        if (getContext() != null) {
-            //Loading of the Image of the pokemon
-            Glide.with(getContext())
-                    .load(pokemon.getSpritesString())
-                    .apply(options)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            //Let the fragment run is transition animation from postponeEnterTransition();
-                            startPostponedEnterTransition();
-                            return false;
-                        }
+        if(pokemon != null) {
+            //To be able to use the Shared element we need to disable animation from Glide
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .dontAnimate();
+            if (getContext() != null) {
+                //Loading of the Image of the pokemon
+                Glide.with(getContext())
+                        .load(pokemon.getSpritesString())
+                        .apply(options)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                //Let the fragment run is transition animation from postponeEnterTransition();
+                                startPostponedEnterTransition();
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            //Let the fragment run is transition animation from postponeEnterTransition();
-                            startPostponedEnterTransition();
-                            return false;
-                        }
-                    })
-                    .into(imageViewPokemonLogo);
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                //Let the fragment run is transition animation from postponeEnterTransition();
+                                startPostponedEnterTransition();
+                                return false;
+                            }
+                        })
+                        .into(imageViewPokemonLogo);
+            }
+
+            //If we can Navigate between pokemons we show his name on the actionBar, else we keep the default name
+            setTitle(isNavigationShown ? pokemon.getName() : null);
+
+            /* Mapping the info from ViewModel into view */
+            textViewPokemonId.setText(getString(R.string.number, pokemon.getId()));
+            textViewPokemonName.setText(pokemon.getName());
+            textViewPokemonBaseExp.setText(getString(R.string.exp, pokemon.getBaseExperience()));
+            textViewPokemonHeight.setText(getString(R.string.height, pokemon.getHeight()));
+            textViewPokemonWeight.setText(getString(R.string.weight, pokemon.getWeight()));
+
+            /* Avoid multiplication of types from ViewModel triggering to much time */
+            linearLayoutPokemonTypes.removeAllViews();
+            for (Type type : pokemon.getTypes()) {
+                TextView textViewType = new TextView(getContext());
+                textViewType.setText(type.getType().getName());
+                linearLayoutPokemonTypes.addView(textViewType);
+            }
         }
-
-        //If we can Navigate between pokemons we show his name on the actionBar, else we keep the default name
-        setTitle(isNavigationShown ? pokemon.getName() : null);
-
-        /* Mapping the info from ViewModel into view */
-        textViewPokemonId.setText(getString(R.string.number, pokemon.getId()));
-        textViewPokemonName.setText(pokemon.getName());
-        textViewPokemonBaseExp.setText(getString(R.string.exp, pokemon.getBaseExperience()));
-        textViewPokemonHeight.setText(getString(R.string.height, pokemon.getHeight()));
-        textViewPokemonWeight.setText(getString(R.string.weight, pokemon.getWeight()));
-
-        /* Avoid multiplication of types from ViewModel triggering to much time */
-        linearLayoutpokemonTypes.removeAllViews();
-        for (Type type : pokemon.getTypes()) {
-            TextView textViewType = new TextView(getContext());
-            textViewType.setText(type.getType().getName());
-            linearLayoutpokemonTypes.addView(textViewType);
-        }
-
     }
 
     @Override
     public void onSwipe(int direction) {
         if (direction == PokemonGestureListener.LEFT) {
-            //If the current pokemon is the first one we dont take account of the swipe
+            //If the current pokemon is the first one we don't take account of the swipe
             if (pokemonId != 1) {
                 navigationManager.startPokemonDetail(pokemonId - 1, imageViewPokemonLogo, true);
             }
         } else if (direction == PokemonGestureListener.RIGHT) {
-            //If the current pokemon is the last one we dont take account of the swipe
+            //If the current pokemon is the last one we don't take account of the swipe
             if (pokemonId != idMaxPokemon) {
                 navigationManager.startPokemonDetail(pokemonId + 1, imageViewPokemonLogo, true);
             }

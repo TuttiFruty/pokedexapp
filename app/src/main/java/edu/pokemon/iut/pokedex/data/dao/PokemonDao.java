@@ -26,16 +26,16 @@ public interface PokemonDao {
     void save(Pokemon pokemon);
 
     /**
-     * Query to retreive a specific pokemon by is ID
+     * Query to retrieve a specific pokemon by is ID
      *
-     * @param pokemonId of the pokemon to retreive
+     * @param pokemonId of the pokemon to retrieve
      * @return {@link Pokemon} for the given id, {@link LiveData} allow to observe any change in database and notify the observer.
      */
     @Query("SELECT * FROM pokemon WHERE id = :pokemonId")
     LiveData<Pokemon> load(int pokemonId);
 
     /**
-     * Query to retreive ALL the pokemon
+     * Query to retrieve ALL the pokemon
      *
      * @return {@link List<Pokemon>}, {@link LiveData} allow to observe any change in database and notify the observer.
      */
@@ -43,7 +43,7 @@ public interface PokemonDao {
     LiveData<List<Pokemon>> loadAll();
 
     /**
-     * Query to retreive SOME pokemon filtered by their name
+     * Query to retrieve SOME pokemon filtered by their name
      *
      * @param query name or portion of name
      * @return {@link List<Pokemon>}, {@link LiveData} allow to observe any change in database and notify the observer.
@@ -54,7 +54,7 @@ public interface PokemonDao {
     /**
      * Query to know if a pokemon already exist or not in the database
      *
-     * @param pokemonId of the one to check existance
+     * @param pokemonId of the one to check existence
      * @return id of the pokemon
      */
     @Query("SELECT id from pokemon where id = :pokemonId")

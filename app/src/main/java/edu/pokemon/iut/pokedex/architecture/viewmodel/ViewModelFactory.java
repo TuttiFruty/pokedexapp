@@ -28,7 +28,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     }
 
     /**
-     * The method create is override to allow ViewModel creation with non-empty consctructor.<br>
+     * The method create is override to allow ViewModel creation with non-empty constructor.<br>
      * The arguments of the constructor of ViewModel must be injectable by dagger.
      *
      * @param modelClass the instance of ViewModel

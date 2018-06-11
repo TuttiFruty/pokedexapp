@@ -20,7 +20,7 @@ public class ApiModule {
      * @return an instance of {@link PokemonApiClient}
      */
     @Provides
-    public PokemonApiClient provicePokemonApiClient() {
+    public PokemonApiClient providePokemonApiClient() {
         return new PokemonApiClient();
     }
 

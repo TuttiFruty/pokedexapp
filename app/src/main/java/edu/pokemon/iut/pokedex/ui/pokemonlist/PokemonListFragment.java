@@ -33,7 +33,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
     @BindView(R.id.rv_pokemon_list)
     protected RecyclerView pokemonListView;
 
-    /* ATTRIBUTS */
+    /* ATTRIBUTES */
     private PokemonListViewModel viewModel;
     private PokemonAdapter adapter;
     private View rootView;

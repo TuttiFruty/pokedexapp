@@ -25,13 +25,13 @@ public abstract class ViewModelModule {
      * @return an interface of {@link ViewModelProvider.Factory} who refers to the param.
      */
     @Binds
-    abstract ViewModelProvider.Factory bindsViewModelFacotry(ViewModelFactory viewModelFactory);
+    abstract ViewModelProvider.Factory bindsViewModelFactory(ViewModelFactory viewModelFactory);
 
 
     /**
      * Returns a ViewModel to manipulate a list of Pokemon
      *
-     * @param pokemonListViewModel actual implementation of abtract class {@link ViewModel}
+     * @param pokemonListViewModel actual implementation of abstract class {@link ViewModel}
      * @return an instance of abstract class {@link ViewModel}
      */
     @Binds
@@ -42,7 +42,7 @@ public abstract class ViewModelModule {
     /**
      * Returns a ViewModel to manipulate a single Pokemon
      *
-     * @param pokemonViewModel actual implementation of abtract class {@link ViewModel}
+     * @param pokemonViewModel actual implementation of abstract class {@link ViewModel}
      * @return an instance of abstract class {@link ViewModel}
      */
     @Binds

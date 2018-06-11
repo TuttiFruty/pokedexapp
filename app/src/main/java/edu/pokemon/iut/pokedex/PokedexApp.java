@@ -8,7 +8,7 @@ import edu.pokemon.iut.pokedex.architecture.di.DatabaseModule;
 import edu.pokemon.iut.pokedex.architecture.di.PokemonComponent;
 
 /**
- * Core for the Dagger Depedency injections, and Database migration
+ * Core for the Dagger Dependency injections, and Database migration
  */
 public class PokedexApp extends Application {
 
@@ -19,8 +19,8 @@ public class PokedexApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //Init of injection dependency
         application = this;
-        //je créé mon githubcompoent, et le stock dans mon application
         pokemonComponent = DaggerPokemonComponent.builder()
                 .databaseModule(new DatabaseModule(getApplicationContext()))
                 .apiModule(new ApiModule())
