@@ -3,7 +3,10 @@ package edu.pokemon.iut.pokedex.architecture;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import javax.inject.Inject;
@@ -23,8 +26,10 @@ import edu.pokemon.iut.pokedex.R;
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
+    private static final String KEY_LAST_SEARCH_QUERY = "KEY_LAST_SEARCH_QUERY";
     @Inject
     protected NavigationManager navigationManager;
+    private String lastQuery = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,4 +57,64 @@ public class BaseActivity extends AppCompatActivity {
         this.navigationManager.navigateBack(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // Configure the search info and add any event listeners...
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                BaseActivity.this.lastQuery = query;
+                BaseActivity.this.navigationManager.startPokemonList(null, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BaseActivity.this.lastQuery = newText;
+                BaseActivity.this.navigationManager.startPokemonList(null, newText);
+                return false;
+            }
+        });
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                BaseActivity.this.lastQuery = null;
+                return true;
+            }
+        });
+
+        // Restore last Query if any exist and keep search bar activated
+        // We do not rerun the query or re input the text
+        if(this.lastQuery != null && !this.lastQuery.isEmpty()){
+            searchItem.expandActionView();
+            searchView.setQuery(this.lastQuery, true);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putCharSequence(KEY_LAST_SEARCH_QUERY, lastQuery);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null){
+            this.lastQuery = savedInstanceState.getString(KEY_LAST_SEARCH_QUERY, null);
+        }
+    }
 }
