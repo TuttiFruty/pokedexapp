@@ -23,10 +23,14 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import edu.pokemon.iut.pokedex.PokedexApp;
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.BaseFragment;
+import edu.pokemon.iut.pokedex.architecture.NavigationManager;
 import edu.pokemon.iut.pokedex.architecture.listener.PokemonGestureListener;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
 import edu.pokemon.iut.pokedex.data.model.Type;
@@ -49,6 +53,10 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     protected View constraintLayoutPokemonDetail;
     @BindView(R.id.iv_pokemon_logo)
     protected ImageView imageViewPokemonLogo;
+    @BindView(R.id.iv_pokemon_capture)
+    protected ImageView imageViewPokemonCapture;
+    @BindView(R.id.cv_pokemon_capture)
+    protected View imageViewPokemonCaptureShadow;
     @BindView(R.id.tv_pokemon_numero)
     protected TextView textViewPokemonId;
     @BindView(R.id.tv_pokemon_name)
@@ -70,16 +78,19 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
 
     /**
      * @param pokemonId         id of the pokemon shown
-     * @param transitionName    id of the transition view
+     * @param transitionView    id of the transition view
      * @param isNavigationShown true if we show the arrow, false otherwise
      * @return newInstance of PokemonDetailFragment
      */
-    public static PokemonDetailFragment newInstance(int pokemonId, String transitionName, boolean isNavigationShown) {
+    public static PokemonDetailFragment newInstance(int pokemonId, List<View> transitionView, boolean isNavigationShown) {
         PokemonDetailFragment pokemonDetailFragment = new PokemonDetailFragment();
-
+        ArrayList<String> transitionNames = new ArrayList<>();
+        for (View view : transitionView) {
+            transitionNames.add(view.getTransitionName());
+        }
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_POKEMON_ID, pokemonId);
-        bundle.putString(KEY_TRANSITION_NAME, transitionName);
+        bundle.putStringArrayList(KEY_TRANSITION_NAME, transitionNames);
         bundle.putBoolean(KEY_SHOW_NAVIGATION, isNavigationShown);
 
         pokemonDetailFragment.setArguments(bundle);
@@ -120,19 +131,29 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String transitionName = "NO_TRANSITION";
+        ArrayList<String> transitionNames = null;
 
         //Retrieve of the different arguments passed when creating the instance
         if (getArguments() != null) {
             isNavigationShown = getArguments().getBoolean(KEY_SHOW_NAVIGATION, true);
-            transitionName = getArguments().getString(KEY_TRANSITION_NAME, "NO_TRANSITION");
+            transitionNames = getArguments().getStringArrayList(KEY_TRANSITION_NAME);
         }
 
         initActionBar(isNavigationShown, null);
 
         //The sharedElement between screens is only available for version above of LOLLIPOP
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            imageViewPokemonLogo.setTransitionName(transitionName);
+            if(transitionNames != null ){
+                for (String transitionName : transitionNames) {
+                    if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_LOGO)){
+                        imageViewPokemonLogo.setTransitionName(transitionName);
+                    }else if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_CAPTURE)){
+                        imageViewPokemonCapture.setTransitionName(transitionName);
+                    }else if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_SHADOW)){
+                        imageViewPokemonCaptureShadow.setTransitionName(transitionName);
+                    }
+                }
+            }
         }
 
         //If we can show the navigation, we can then swipe between pokemons
@@ -145,7 +166,7 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
         PokemonViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonViewModel.class);
         viewModel.init(this.pokemonId);
         //Once we get the pokemon from the ViewModel or if he is updated we call initView
-        viewModel.getPokemon().observe(this, this::initView);
+        viewModel.getPokemon().observe(this, pokemon -> initView(pokemon, viewModel));
         //Once we get the number max of pokemon from the ViewModel or if he is updated we call update the value
         //That allow us to not swipe further than the last one in database
         viewModel.getIdMaxPokemon().observe(this, integer -> idMaxPokemon = integer != null ? integer : 0);
@@ -155,8 +176,9 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
      * Initialise the view with the given pokemon
      *
      * @param pokemon {@link Pokemon} to show
+     * @param viewModel allows access to capture method
      */
-    private void initView(Pokemon pokemon) {
+    private void initView(Pokemon pokemon, PokemonViewModel viewModel) {
         if(pokemon != null) {
             //To be able to use the Shared element we need to disable animation from Glide
             RequestOptions options = new RequestOptions()
@@ -195,6 +217,9 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
             textViewPokemonHeight.setText(getString(R.string.height, pokemon.getHeight()));
             textViewPokemonWeight.setText(getString(R.string.weight, pokemon.getWeight()));
 
+            //If the pokemon is captured we use the full pokeball, otherwise the empty one
+            imageViewPokemonCapture.setImageResource(pokemon.isCapture() ? R.drawable.ic_launcher_pokeball : R.drawable.ic_launcher_pokeball_empty);
+            imageViewPokemonCapture.setOnClickListener(view -> viewModel.capture(pokemon));
             /* Avoid multiplication of types from ViewModel triggering to much time */
             linearLayoutPokemonTypes.removeAllViews();
             for (Type type : pokemon.getTypes()) {
@@ -207,15 +232,19 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
 
     @Override
     public void onSwipe(int direction) {
+        List<View> transitionView = new ArrayList<>();
+        transitionView.add(imageViewPokemonLogo);
+        transitionView.add(imageViewPokemonCapture);
+
         if (direction == PokemonGestureListener.LEFT) {
             //If the current pokemon is the first one we don't take account of the swipe
             if (pokemonId != 1) {
-                navigationManager.startPokemonDetail(pokemonId - 1, imageViewPokemonLogo, true);
+                navigationManager.startPokemonDetail(pokemonId - 1, transitionView, true);
             }
         } else if (direction == PokemonGestureListener.RIGHT) {
             //If the current pokemon is the last one we don't take account of the swipe
             if (pokemonId != idMaxPokemon) {
-                navigationManager.startPokemonDetail(pokemonId + 1, imageViewPokemonLogo, true);
+                navigationManager.startPokemonDetail(pokemonId + 1, transitionView, true);
             }
         }
     }

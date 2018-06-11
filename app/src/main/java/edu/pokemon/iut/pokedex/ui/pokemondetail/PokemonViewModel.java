@@ -55,4 +55,12 @@ public class PokemonViewModel extends ViewModel {
     public LiveData<Integer> getIdMaxPokemon() {
         return idMaxPokemon;
     }
+
+    /**
+     * Allow to update the capture status of a pokemon
+     * @param pokemon to update
+     */
+    public void capture(Pokemon pokemon) {
+        pokemonRepository.capture(pokemon.capture());
+    }
 }

@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
+import java.util.List;
+
 import javax.inject.Singleton;
 
 import edu.pokemon.iut.pokedex.R;
@@ -18,6 +20,10 @@ import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
  */
 @Singleton
 public class NavigationManager {
+    //Keys used to transition Views between Fragments
+    public static final String IMAGE_VIEW_POKEMON_LOGO = "IMAGE_VIEW_POKEMON_LOGO";
+    public static final String IMAGE_VIEW_POKEMON_CAPTURE = "IMAGE_VIEW_POKEMON_CAPTURE";
+    public static final String IMAGE_VIEW_POKEMON_SHADOW = "IMAGE_VIEW_POKEMON_SHADOW";
     //Allow to know if we the app is launch in a tablet or big screen allow
     private boolean tabletNavigation;
     //Allow to know if we navigate through the app with swipe
@@ -58,12 +64,11 @@ public class NavigationManager {
     /**
      * Displays the next fragment<br>
      * The parameter isRoot allow the NavigationManager to pop all the current backstack<br>
-     *
-     * @param fragment      which fragment we want to show
-     * @param sharedElement any view that is shared between the current fragment and the new one
+     *  @param fragment      which fragment we want to show
+     * @param sharedElements any view that is shared between the current fragment and the new one
      * @param isRoot        true if the new fragment must considered as root of the application
      */
-    private void open(Fragment fragment, View sharedElement, boolean isRoot) {
+    private void open(Fragment fragment, List<View> sharedElements, boolean isRoot) {
         if (this.fragmentManager != null) {
             //If we are on tablet navigation we can show both list and detail on the same screen if not we always show on the main_container
             int idContainer = isTabletNavigation() && !isRoot ? R.id.detail_container : R.id.main_container;
@@ -71,10 +76,12 @@ public class NavigationManager {
             FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
 
             //In cas we have common view on old and new fragment, we add it to the transaction
-            if (sharedElement != null) {
-                String transition = ViewCompat.getTransitionName(sharedElement);
-                if(transition != null) {
-                    fragmentTransaction.addSharedElement(sharedElement, transition);
+            if (sharedElements != null) {
+                for (View sharedElement : sharedElements) {
+                    String transition = ViewCompat.getTransitionName(sharedElement);
+                    if(transition != null) {
+                        fragmentTransaction.addSharedElement(sharedElement, transition);
+                    }
                 }
             }
 
@@ -90,12 +97,12 @@ public class NavigationManager {
     /**
      * pops every fragment and starts the given fragment as a new one.
      *
+     * @param sharedElements any view that is shared between the current fragment and the new one
      * @param fragment      which fragment we want to show
-     * @param sharedElement any view that is shared between the current fragment and the new one
      */
-    private void openAsRoot(Fragment fragment, View sharedElement) {
+    private void openAsRoot(Fragment fragment, List<View> sharedElements) {
         popEveryFragment();
-        open(fragment, sharedElement, true);
+        open(fragment, sharedElements, true);
     }
 
     /**
@@ -139,11 +146,10 @@ public class NavigationManager {
      * Start the pokemon list fragment.<br>
      * We can pass it a View as a shared element between fragments.<br>
      * Also a query can be used to filter the list shown<br>
-     *
      * @param sharedElement {@link View} shared between both fragments
      * @param query         {@link CharSequence} that filter the list
      */
-    public void startPokemonList(View sharedElement, CharSequence query) {
+    public void startPokemonList(List<View> sharedElement, CharSequence query) {
         Fragment fragment = PokemonListFragment.newInstance(query);
         openAsRoot(fragment, sharedElement);
     }
@@ -151,15 +157,14 @@ public class NavigationManager {
     /**
      * Start the pokemon detail view for the pokemonId<br>
      * We can pass it a View as a shared element between fragments.<br>
-     *
-     * @param pokemonId     the pokemon id to show
-     * @param sharedElement {@link View} shared between both fragments
+     *  @param pokemonId     the pokemon id to show
+     * @param sharedElements {@link View} shared between both fragments
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
-    public void startPokemonDetail(int pokemonId, View sharedElement, boolean isSwipe) {
+    public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
         this.isSwipe = isSwipe;
-        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, ViewCompat.getTransitionName(sharedElement), !isTabletNavigation());
-        open(fragment, sharedElement, false);
+        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, sharedElements, !isTabletNavigation());
+        open(fragment, sharedElements, false);
     }
 
     /**

@@ -52,6 +52,6 @@ public class PokemonListViewModel extends ViewModel {
      * @param pokemon to update
      */
     public void capture(Pokemon pokemon) {
-        pokemonRepository.capture(pokemon);
+        pokemonRepository.capture(pokemon.capture());
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.pokemon.iut.pokedex.R;
@@ -63,11 +64,18 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                 .into(holder.pokemonLogo);
 
         //Preparation for the transition animation between fragments
-        ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName());
+        ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_LOGO);
+        ViewCompat.setTransitionName(holder.pokemonCapture, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_CAPTURE);
+        ViewCompat.setTransitionName(holder.pokemonCaptureShadow, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_SHADOW);
+
+        List<View> listTransitionView = new ArrayList<>();
+        listTransitionView.add(holder.pokemonLogo);
+        listTransitionView.add(holder.pokemonCapture);
+        listTransitionView.add(holder.pokemonCaptureShadow);
 
         /* Init of the listeners */
-        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), holder.pokemonLogo, false));
-        holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon.capture()));
+        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), listTransitionView, false));
+        holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon));
     }
 
     @Override
@@ -97,6 +105,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         final ImageView pokemonLogo;
         final View pokemonLine;
         final ImageView pokemonCapture;
+        final View pokemonCaptureShadow;
 
         ViewHolder(View v) {
             super(v);
@@ -105,6 +114,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
             pokemonLogo = v.findViewById(R.id.iv_pokemon_logo);
             pokemonLine = v.findViewById(R.id.cl_pokemon_line);
             pokemonCapture = v.findViewById(R.id.iv_pokemon_capture);
+            pokemonCaptureShadow = v.findViewById(R.id.cv_pokemon_capture);
         }
     }
 }
