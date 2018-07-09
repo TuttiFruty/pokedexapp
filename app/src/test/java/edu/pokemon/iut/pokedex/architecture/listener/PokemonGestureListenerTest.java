@@ -71,7 +71,7 @@ public class PokemonGestureListenerTest {
         pokemonGestureListener.onFling(e1, e2, velocityX, velocityY);
 
         //THEN
-        verify(fakeListener).onSwipe(PokemonGestureListener.UP);
+        verify(fakeListener).onSwipe(PokemonGestureListener.Companion.getUP());
         assertEquals(true, pokemonGestureListener.onFling(e1, e2, velocityX, velocityY));
     }
 
@@ -92,7 +92,7 @@ public class PokemonGestureListenerTest {
         pokemonGestureListener.onFling(e1, e2, velocityX, velocityY);
 
         //THEN
-        verify(fakeListener).onSwipe(PokemonGestureListener.DOWN);
+        verify(fakeListener).onSwipe(PokemonGestureListener.Companion.getDOWN());
         assertEquals(true, pokemonGestureListener.onFling(e1, e2, velocityX, velocityY));
     }
 
@@ -113,7 +113,7 @@ public class PokemonGestureListenerTest {
         pokemonGestureListener.onFling(e1, e2, velocityX, velocityY);
 
         //THEN
-        verify(fakeListener).onSwipe(PokemonGestureListener.LEFT);
+        verify(fakeListener).onSwipe(PokemonGestureListener.Companion.getLEFT());
         assertEquals(true, pokemonGestureListener.onFling(e1, e2, velocityX, velocityY));
     }
 
@@ -134,7 +134,7 @@ public class PokemonGestureListenerTest {
         pokemonGestureListener.onFling(e1, e2, velocityX, velocityY);
 
         //THEN
-        verify(fakeListener).onSwipe(PokemonGestureListener.RIGHT);
+        verify(fakeListener).onSwipe(PokemonGestureListener.Companion.getRIGHT());
         assertEquals(true, pokemonGestureListener.onFling(e1, e2, velocityX, velocityY));
     }
 
