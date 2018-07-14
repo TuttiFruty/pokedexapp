@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         holder.pokemonCapture.setImageResource(pokemon.isCapture() ? R.drawable.ic_launcher_pokeball : R.drawable.ic_launcher_pokeball_empty);
 
         RequestOptions options = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .placeholder(R.drawable.ic_launcher_pokeball)
                 .centerCrop();
         Glide.with(context)
                 .load(pokemon.getSpritesString())
