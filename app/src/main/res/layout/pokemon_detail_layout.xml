@@ -5,7 +5,20 @@
     android:id="@+id/cl_pokemon_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccentLight">
+    android:background="@color/colorAccentLight"
+    tools:ignore="Overdraw">
+
+    <ImageView
+        android:id="@+id/iv_pokemon_logo"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/content_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_pokemon_name"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_launcher_pokeball" />
 
     <com.github.florent37.shapeofview.shapes.CircleView
         android:id="@+id/cv_pokemon_capture"
@@ -29,23 +42,14 @@
 
     </com.github.florent37.shapeofview.shapes.CircleView>
 
-    <ImageView
-        android:id="@+id/iv_pokemon_logo"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/content_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_pokemon_name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ic_launcher_pokeball" />
-
     <TextView
         android:id="@+id/tv_pokemon_numero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:layout_marginStart="8dp"
+        android:background="@drawable/bg_white_corner_round"
+        android:elevation="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_pokemon_logo"
@@ -55,95 +59,122 @@
         android:id="@+id/tv_pokemon_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/bg_white_corner_round"
+        android:elevation="8dp"
         android:textAllCaps="true"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_numero"
         tools:text="Bulbasaur" />
 
-    <TextView
-        android:id="@+id/tv_pokemon_base_exp_label"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_pokemon_detail_subinfo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/base_exp"
-        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
-        app:layout_constraintStart_toStartOf="@+id/tv_pokemon_type_label"
-        app:layout_constraintTop_toTopOf="@+id/barrier" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_base_exp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_base_exp_label"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_white_corner_round"
+        android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_pokemon_base_exp_label"
-        tools:text="150 exp" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_height_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/ht"
-        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
-        app:layout_constraintStart_toStartOf="@+id/tv_pokemon_base_exp_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_base_exp_label" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_height_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_pokemon_height_label"
-        tools:text="20 cm" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_weight_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/wt"
-        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
-        app:layout_constraintStart_toStartOf="@+id/tv_pokemon_height_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_height_label" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_weight_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_pokemon_weight_label"
-        tools:text="20 kg" />
-
-    <TextView
-        android:id="@+id/tv_pokemon_type_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/types"
-        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_pokemon_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_pokemon_logo">
 
-    <LinearLayout
-        android:id="@+id/ll_pokemon_types"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_pokemon_type_label">
+        <TextView
+            android:id="@+id/tv_pokemon_type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/types"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_pokemon_types"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_pokemon_type_label">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_pokemon_base_exp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_base_exp_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_pokemon_base_exp_label"
+            tools:text="150 exp" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_base_exp_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/base_exp"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            app:layout_constraintStart_toStartOf="@+id/tv_pokemon_type_label"
+            app:layout_constraintTop_toTopOf="@+id/barrier" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_height_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/ht"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            app:layout_constraintStart_toStartOf="@+id/tv_pokemon_base_exp_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_base_exp_label" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_height_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_pokemon_height_label"
+            tools:text="20 cm" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_weight_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/wt"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_pokemon_height_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_height_label" />
+
+        <TextView
+            android:id="@+id/tv_pokemon_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_pokemon_weight_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_pokemon_weight_label"
+            tools:text="20 kg" />
+
+
+        <android.support.constraint.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="ll_pokemon_types,tv_pokemon_type_label" />
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/tv_pokemon_description"
@@ -151,16 +182,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_weight_label" />
+        app:layout_constraintTop_toBottomOf="@+id/cl_pokemon_detail_subinfo" />
 
-    <android.support.constraint.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="ll_pokemon_types,tv_pokemon_type_label" />
 
 </android.support.constraint.ConstraintLayout>
