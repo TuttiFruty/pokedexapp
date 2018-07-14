@@ -70,10 +70,11 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         pokemonListView.setHasFixedSize(true);
+        pokemonListView.setItemViewCacheSize(20);
 
         // use a linear layout manager if in portrait or a grid layout manager in landscape or tablet view
         int orientation = Configuration.ORIENTATION_PORTRAIT;
-        if(getActivity() != null && getActivity().getResources() != null) {
+        if (getActivity() != null && getActivity().getResources() != null) {
             orientation = getActivity().getResources().getConfiguration().orientation;
         }
         LinearLayoutManager mLayoutManager;
@@ -107,6 +108,17 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         viewModel.getPokemons().observe(this, pokemonList -> adapter.setData(pokemonList));
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (this.navigationManager != null && this.navigationManager.getCurrentPokemon() > 0) {
+            if (pokemonListView != null) {
+                pokemonListView.scrollToPosition(navigationManager.getCurrentPokemon() - 1);
+            }
+        }
+    }
+
 
     @Override
     public void onCapture(Pokemon pokemon) {

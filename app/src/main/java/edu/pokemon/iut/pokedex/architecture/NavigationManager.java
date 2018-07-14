@@ -1,6 +1,7 @@
 package edu.pokemon.iut.pokedex.architecture;
 
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ public class NavigationManager {
     public static final String IMAGE_VIEW_POKEMON_LOGO = "IMAGE_VIEW_POKEMON_LOGO";
     public static final String IMAGE_VIEW_POKEMON_CAPTURE = "IMAGE_VIEW_POKEMON_CAPTURE";
     public static final String IMAGE_VIEW_POKEMON_SHADOW = "IMAGE_VIEW_POKEMON_SHADOW";
+    private static final String TAG_ROOT = "ROOT";
     //Allow to know if we the app is launch in a tablet or big screen allow
     private boolean tabletNavigation;
     //Allow to know if we navigate through the app with swipe
@@ -31,6 +33,8 @@ public class NavigationManager {
 
     private FragmentManager fragmentManager;
     private NavigationListener navigationListener;
+
+    private int currentPokemon  = 0;
 
     /**
      * @return true if we are on Tablet/BigScreen, false otherwise
@@ -68,7 +72,7 @@ public class NavigationManager {
      * @param sharedElements any view that is shared between the current fragment and the new one
      * @param isRoot        true if the new fragment must considered as root of the application
      */
-    private void open(Fragment fragment, List<View> sharedElements, boolean isRoot) {
+    private void open(Fragment fragment, List<View> sharedElements, boolean isRoot, @Nullable String tag) {
         if (this.fragmentManager != null) {
             //If we are on tablet navigation we can show both list and detail on the same screen if not we always show on the main_container
             int idContainer = isTabletNavigation() && !isRoot ? R.id.detail_container : R.id.main_container;
@@ -87,7 +91,7 @@ public class NavigationManager {
 
             //If we are on tablet or we are not the root we don't need to add the fragment to the backstack
             if (!isTabletNavigation() || isRoot) {
-                fragmentTransaction.addToBackStack(fragment.toString());
+                fragmentTransaction.addToBackStack(tag !=null?tag:fragment.toString());
             }
 
             fragmentTransaction.replace(idContainer, fragment).commit();
@@ -102,7 +106,7 @@ public class NavigationManager {
      */
     private void openAsRoot(Fragment fragment, List<View> sharedElements) {
         popEveryFragment();
-        open(fragment, sharedElements, true);
+        open(fragment, sharedElements, true, TAG_ROOT);
     }
 
     /**
@@ -130,7 +134,8 @@ public class NavigationManager {
     public void navigateBack(Activity baseActivity) {
         if (isSwipe) {
             isSwipe = false;
-            startPokemonList(null, null);
+            fragmentManager.popBackStack(TAG_ROOT, 0);
+            //startPokemonList(null, null);
         } else {
             if (this.fragmentManager.getBackStackEntryCount() == 0) {
                 // we can finish the base activity since we have no other fragments
@@ -162,9 +167,10 @@ public class NavigationManager {
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
     public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
+        this.currentPokemon = pokemonId;
         this.isSwipe = isSwipe;
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, sharedElements, !isTabletNavigation());
-        open(fragment, sharedElements, false);
+        open(fragment, sharedElements, false, null);
     }
 
     /**
@@ -176,6 +182,10 @@ public class NavigationManager {
 
     public void setNavigationListener(NavigationListener navigationListener) {
         this.navigationListener = navigationListener;
+    }
+
+    public int getCurrentPokemon() {
+        return currentPokemon;
     }
 
     /**
