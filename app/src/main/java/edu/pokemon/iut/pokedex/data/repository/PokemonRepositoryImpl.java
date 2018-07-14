@@ -21,7 +21,7 @@ public class PokemonRepositoryImpl implements PokemonRepository {
     private final PokemonService pokemonService;
     private final PokemonDao pokemonDao;
     private final Executor executor;
-    private int maxIdPokemon = 251;
+    private int maxIdPokemon = 807;
 
     @Override
     public void setMaxIdPokemon(int maxIdPokemon){
