@@ -8,16 +8,6 @@
     android:background="@color/colorAccentLight"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_pokemon_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/pokemon_line_view" >
-
-    </android.support.v7.widget.RecyclerView>
+    <!-- TODO 1) AJOUTER UNE RECYCLERVIEW ICI POUR CONTENIR LA LISTE DES POKEMONS -->
 
 </android.support.constraint.ConstraintLayout>

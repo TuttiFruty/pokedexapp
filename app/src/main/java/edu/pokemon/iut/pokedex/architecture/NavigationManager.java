@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import edu.pokemon.iut.pokedex.R;
-import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonDetailFragment;
 import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
 
 /**
@@ -27,7 +25,7 @@ public class NavigationManager {
     public static final String IMAGE_VIEW_POKEMON_SHADOW = "IMAGE_VIEW_POKEMON_SHADOW";
     private static final String TAG_ROOT = "ROOT";
     //Allow to know if we the app is launch in a tablet or big screen allow
-    private boolean tabletNavigation;
+    private boolean tabletNavigation = false;
     //Allow to know if we navigate through the app with swipe
     private boolean isSwipe = false;
 
@@ -74,27 +72,9 @@ public class NavigationManager {
      */
     private void open(Fragment fragment, List<View> sharedElements, boolean isRoot, @Nullable String tag) {
         if (this.fragmentManager != null) {
-            //If we are on tablet navigation we can show both list and detail on the same screen if not we always show on the main_container
-            int idContainer = isTabletNavigation() && !isRoot ? R.id.detail_container : R.id.main_container;
-
             FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
 
-            //In cas we have common view on old and new fragment, we add it to the transaction
-            if (sharedElements != null) {
-                for (View sharedElement : sharedElements) {
-                    String transition = ViewCompat.getTransitionName(sharedElement);
-                    if(transition != null) {
-                        fragmentTransaction.addSharedElement(sharedElement, transition);
-                    }
-                }
-            }
-
-            //If we are on tablet or we are not the root we don't need to add the fragment to the backstack
-            if (!isTabletNavigation() || isRoot) {
-                fragmentTransaction.addToBackStack(tag !=null?tag:fragment.toString());
-            }
-
-            fragmentTransaction.replace(idContainer, fragment).commit();
+            fragmentTransaction.replace(R.id.main_container, fragment).commit();
         }
     }
 
@@ -167,10 +147,7 @@ public class NavigationManager {
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
     public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
-        this.currentPokemon = pokemonId;
-        this.isSwipe = isSwipe;
-        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId, sharedElements, !isTabletNavigation());
-        open(fragment, sharedElements, false, null);
+
     }
 
     /**

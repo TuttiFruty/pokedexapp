@@ -21,10 +21,6 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
         this.navigationManager.init(getSupportFragmentManager());
         this.navigationManager.setNavigationListener(this);
 
-        View detailsFrame = findViewById(R.id.detail_container);
-        //If the R.layout.activity_navigation contains a detail_container we know we are on a Tablet/BigScreen
-        this.navigationManager.setTabletNavigation(detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE);
-
         // start as the first screen the rules overview if there is no configuration change(start from scratch, else we stay where we are)
         if (savedInstanceState == null) {
             this.navigationManager.startPokemonList(null, null);

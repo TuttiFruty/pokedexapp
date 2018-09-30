@@ -51,34 +51,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         /* Mapping of the data into the view*/
         Pokemon pokemon = dataSet.get(position);
-        holder.pokemonNumber.setText(context.getString(R.string.number, pokemon.getId()));
-        holder.pokemonName.setText(pokemon.getName());
 
-        //If the pokemon is captured we use the full pokeball, otherwise the empty one
-        holder.pokemonCapture.setImageResource(pokemon.isCapture() ? R.drawable.ic_launcher_pokeball : R.drawable.ic_launcher_pokeball_empty);
+        // TODO 5) RECUPERER VIA LE HOLDER LA TEXTVIEW
 
-        RequestOptions options = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.ic_launcher_pokeball)
-                .centerCrop();
-        Glide.with(context)
-                .load(pokemon.getSpritesString())
-                .apply(options)
-                .into(holder.pokemonLogo);
-
-        //Preparation for the transition animation between fragments
-        ViewCompat.setTransitionName(holder.pokemonLogo, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_LOGO);
-        ViewCompat.setTransitionName(holder.pokemonCapture, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_CAPTURE);
-        ViewCompat.setTransitionName(holder.pokemonCaptureShadow, pokemon.getName()+NavigationManager.IMAGE_VIEW_POKEMON_SHADOW);
-
-        List<View> listTransitionView = new ArrayList<>();
-        listTransitionView.add(holder.pokemonLogo);
-        listTransitionView.add(holder.pokemonCapture);
-        listTransitionView.add(holder.pokemonCaptureShadow);
-
-        /* Init of the listeners */
-        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), listTransitionView, false));
-        holder.pokemonCapture.setOnClickListener(v -> captureListener.onCapture(pokemon));
+        // TODO 6) INSERER LE NOM DU POKEMON DANS LA TEXTVIEW
     }
 
     @Override
@@ -103,21 +79,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
      * Inner ViewHolder for the Pokemon's view
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView pokemonName;
-        final TextView pokemonNumber;
-        final ImageView pokemonLogo;
-        final View pokemonLine;
-        final ImageView pokemonCapture;
-        final View pokemonCaptureShadow;
+        //TODO 3) DECLARER ICI UNE VARIABLE POUR LA TEXTVIEW
 
         ViewHolder(View v) {
             super(v);
-            pokemonName = v.findViewById(R.id.tv_pokemon_name);
-            pokemonNumber = v.findViewById(R.id.tv_pokemon_number);
-            pokemonLogo = v.findViewById(R.id.iv_pokemon_logo);
-            pokemonLine = v.findViewById(R.id.cl_pokemon_line);
-            pokemonCapture = v.findViewById(R.id.iv_pokemon_capture);
-            pokemonCaptureShadow = v.findViewById(R.id.cv_pokemon_capture);
+            //TODO 4) RECUPERER ICI UNE INSTANCE DE LA TEXTVIEW ET LA SAUVEGARGER DANS LA VARIABLE
         }
     }
 }

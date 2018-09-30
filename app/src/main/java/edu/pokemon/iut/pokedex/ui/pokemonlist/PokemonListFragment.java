@@ -2,18 +2,13 @@ package edu.pokemon.iut.pokedex.ui.pokemonlist;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.BindView;
 import edu.pokemon.iut.pokedex.R;
 import edu.pokemon.iut.pokedex.architecture.BaseFragment;
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
@@ -26,12 +21,10 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
 
-    /* BUNDLE KEYS */
-    private static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
 
     /* VIEWS */
-    @BindView(R.id.rv_pokemon_list)
-    protected RecyclerView pokemonListView;
+    // TODO 7) DECLARER ICI UNE VARIABLE POUR LA RECYCLERVIEW
+    // TODO 8) "BINDER" AVEC DAGGER l'ID DE LA VUE SUR LA VARIABLE : @BindView(R.id.vue)
 
     /* ATTRIBUTES */
     private PokemonListViewModel viewModel;
@@ -44,11 +37,6 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
      */
     public static PokemonListFragment newInstance(CharSequence query) {
         PokemonListFragment pokemonListFragment = new PokemonListFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putCharSequence(KEY_SEARCH_QUERY, query);
-
-        pokemonListFragment.setArguments(bundle);
         return pokemonListFragment;
     }
 
@@ -67,61 +55,33 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initActionBar(false, null);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        pokemonListView.setHasFixedSize(true);
-        pokemonListView.setItemViewCacheSize(20);
 
-        // use a linear layout manager if in portrait or a grid layout manager in landscape or tablet view
-        int orientation = Configuration.ORIENTATION_PORTRAIT;
-        if (getActivity() != null && getActivity().getResources() != null) {
-            orientation = getActivity().getResources().getConfiguration().orientation;
-        }
-        LinearLayoutManager mLayoutManager;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mLayoutManager = new LinearLayoutManager(getContext());
-        } else {
-            //We change the number of columns shown if we are or not on a tablet
-            if (navigationManager.isTabletNavigation()) {
-                mLayoutManager = new GridLayoutManager(getContext(), 2);
-            } else {
-                mLayoutManager = new GridLayoutManager(getContext(), 3);
+        // TODO 9) CREER UN LinearLayoutManager POUR DEFINIR LE STYLE D'AFFICHAGE DE LA RECYCLERVIEW
 
-            }
-        }
-        pokemonListView.setLayoutManager(mLayoutManager);
+        // TODO 10) AJOUTER LE LinearLayoutManager SUR LA RECYCLERVIEW
 
-        adapter = new PokemonAdapter(getContext(), navigationManager, this);
-        pokemonListView.setAdapter(adapter);
-        if(pokemonListView.getAdapter() != null) {
-            pokemonListView.getAdapter().notifyDataSetChanged();
-        }
+        // TODO 11) CREER UN PokemonAdapter POUR GERER L'AFFICHAGE DE CHAQUE POKEMON DANS LA RECYCLERVIEW
+
+        // TODO 12) AJOUTER L'ADAPTER A LA RECYCLEVIEW
 
         //Initialisation and observation of the ViewModel for this screen
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
         CharSequence query = null;
-        if (getArguments() != null) {
-            query = getArguments().getCharSequence(KEY_SEARCH_QUERY, null);
-        }
         viewModel.init(query);
 
-        viewModel.getPokemons().observe(this, pokemonList -> adapter.setData(pokemonList));
+        viewModel.getPokemons().observe(this, pokemonList -> {
+            // TODO 13) LORSQUE LA LISTE DES POKEMONS ARRIVE IL FAUT LA DONNER A L'ADAPTER
+        });
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (this.navigationManager != null && this.navigationManager.getCurrentPokemon() > 0) {
-            if (pokemonListView != null) {
-                pokemonListView.scrollToPosition(navigationManager.getCurrentPokemon() - 1);
-            }
-        }
     }
 
 
     @Override
     public void onCapture(Pokemon pokemon) {
-        viewModel.capture(pokemon);
     }
 }
