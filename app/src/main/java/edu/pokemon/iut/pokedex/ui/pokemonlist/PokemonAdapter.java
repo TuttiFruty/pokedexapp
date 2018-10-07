@@ -53,8 +53,19 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         Pokemon pokemon = dataSet.get(position);
 
         // TODO 5) RECUPERER VIA LE HOLDER LA TEXTVIEW
-
         // TODO 6) INSERER LE NOM DU POKEMON DANS LA TEXTVIEW
+        holder.pokemonNumber.setText(context.getString(R.string.number, pokemon.getId()));
+        holder.pokemonName.setText(pokemon.getName());
+
+        // BONUS IMAGE POKEMON ET PLACEHOLDER
+        RequestOptions options = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .placeholder(R.drawable.ic_launcher_pokeball)
+                .centerCrop();
+        Glide.with(context)
+                .load(pokemon.getSpritesString())
+                .apply(options)
+                .into(holder.pokemonLogo);
     }
 
     @Override
@@ -80,10 +91,22 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //TODO 3) DECLARER ICI UNE VARIABLE POUR LA TEXTVIEW
+        final TextView pokemonName;
+        final TextView pokemonNumber;
+        final ImageView pokemonLogo;
+        final View pokemonLine;
+        final ImageView pokemonCapture;
+        final View pokemonCaptureShadow;
 
         ViewHolder(View v) {
             super(v);
             //TODO 4) RECUPERER ICI UNE INSTANCE DE LA TEXTVIEW ET LA SAUVEGARGER DANS LA VARIABLE
+            pokemonName = v.findViewById(R.id.tv_pokemon_name);
+            pokemonNumber = v.findViewById(R.id.tv_pokemon_number);
+            pokemonLogo = v.findViewById(R.id.iv_pokemon_logo);
+            pokemonLine = v.findViewById(R.id.cl_pokemon_line);
+            pokemonCapture = v.findViewById(R.id.iv_pokemon_capture);
+            pokemonCaptureShadow = v.findViewById(R.id.cv_pokemon_capture);
         }
     }
 }
