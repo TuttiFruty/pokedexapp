@@ -8,7 +8,6 @@
     android:background="@color/colorAccentLight"
     >
 
-    <!-- TODO 1) AJOUTER UNE RECYCLERVIEW ICI POUR CONTENIR LA LISTE DES POKEMONS -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_pokemon_list"
         android:layout_width="match_parent"

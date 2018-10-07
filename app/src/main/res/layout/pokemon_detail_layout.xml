@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_pokemon_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccentLight"
+    tools:ignore="Overdraw">
+
+    <!-- TODO 1) INSERER UNE IMAGEVIEW POUR L'IMAGE DU POKEMON -->
+    <!-- TODO 2) INSERER UNE TEXTVIEW POUR LE NUMERO DU POKEMON -->
+    <!-- TODO 3) INSERER UNE TEXTVIEW POUR LE NOM DU POKEMON -->
+    <!-- TODO 4) INSERER UN CONSTRAINTLAYOUT QUI CONTIENDRA LES DETAILS DU POKEMON -->
+    <!-- TODO 5) DANS LE SECOND CONSTRAINT LAYOUT AJOUTER UN LIBELLE 'TYPES' -->
+    <!-- TODO 6) EN FACE DU LIBELLE 'TYPES' AJOUTER UNE TEXTVIEW POUR LE TYPE DU POKEMON-->
+    <!-- TODO 7) DANS LE SECOND CONSTRAINT LAYOUT AJOUTER UN LIBELLE 'BASE EXP' -->
+    <!-- TODO 8) EN FACE DU LIBELLE 'TYPES' AJOUTER UNE TEXTVIEW POUR LA BASE D'EXP DU POKEMON-->
+    <!-- TODO 9) DANS LE SECOND CONSTRAINT LAYOUT AJOUTER UN LIBELLE 'HT' -->
+    <!-- TODO 10) EN FACE DU LIBELLE 'TYPES' AJOUTER UNE TEXTVIEW POUR LA TAILLE DU POKEMON-->
+    <!-- TODO 11) DANS LE SECOND CONSTRAINT LAYOUT AJOUTER UN LIBELLE 'WT' -->
+    <!-- TODO 12) EN FACE DU LIBELLE 'TYPES' AJOUTER UNE TEXTVIEW POUR LE POIDS DU POKEMON-->
+
+</android.support.constraint.ConstraintLayout>

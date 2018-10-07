@@ -28,8 +28,6 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
 
 
     /* VIEWS */
-    // TODO 7) DECLARER ICI UNE VARIABLE POUR LA RECYCLERVIEW
-    // TODO 8) "BINDER" AVEC DAGGER l'ID DE LA VUE SUR LA VARIABLE : @BindView(R.id.vue)
     @BindView(R.id.rv_pokemon_list)
     protected RecyclerView pokemonListView;
 
@@ -67,14 +65,12 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         pokemonListView.setHasFixedSize(true);
         pokemonListView.setItemViewCacheSize(20);
 
-        // BONUS DETECTION CHANGEMENT D'ORIENTATION -> CHANGEMENT DU TYPE DE LAYOUT MANAGER POUR LA RECYCLERVIEW
         // use a linear layout manager if in portrait or a grid layout manager in landscape or tablet view
         int orientation = Configuration.ORIENTATION_PORTRAIT;
         if (getActivity() != null && getActivity().getResources() != null) {
             orientation = getActivity().getResources().getConfiguration().orientation;
         }
 
-        // TODO 9) CREER UN LinearLayoutManager POUR DEFINIR LE STYLE D'AFFICHAGE DE LA RECYCLERVIEW
         LinearLayoutManager mLayoutManager;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             mLayoutManager = new LinearLayoutManager(getContext());
@@ -82,13 +78,9 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
             mLayoutManager = new GridLayoutManager(getContext(), 3);
         }
 
-        // TODO 10) AJOUTER LE LinearLayoutManager SUR LA RECYCLERVIEW
         pokemonListView.setLayoutManager(mLayoutManager);
-        // TODO 11) CREER UN PokemonAdapter POUR GERER L'AFFICHAGE DE CHAQUE POKEMON DANS LA RECYCLERVIEW
         adapter = new PokemonAdapter(getContext(), navigationManager, this);
-        // TODO 12) AJOUTER L'ADAPTER A LA RECYCLEVIEW
         pokemonListView.setAdapter(adapter);
-        // BONUS POUR EMPECHER UN PLANTAGE EN CAS DE 1ER LANCEMENT SANS CONNEXION INTERNET
         if(pokemonListView.getAdapter() != null) {
             pokemonListView.getAdapter().notifyDataSetChanged();
         }
@@ -99,7 +91,6 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         viewModel.init(query);
 
         viewModel.getPokemons().observe(this, pokemonList -> {
-            // TODO 13) LORSQUE LA LISTE DES POKEMONS ARRIVE IL FAUT LA DONNER A L'ADAPTER
             adapter.setData(pokemonList);
         });
 

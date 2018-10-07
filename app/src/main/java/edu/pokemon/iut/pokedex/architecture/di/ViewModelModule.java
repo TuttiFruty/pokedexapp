@@ -37,4 +37,6 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PokemonListViewModel.class)
     abstract ViewModel bindsPokemonListViewModel(PokemonListViewModel pokemonListViewModel);
+
+    // TODO 20) AJOUTER UNE METHODE bindsPokemonDetailViewModel POUR PokemonViewModel
 }

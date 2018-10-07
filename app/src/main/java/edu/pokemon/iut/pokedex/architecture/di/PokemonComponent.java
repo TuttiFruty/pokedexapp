@@ -20,4 +20,6 @@ public interface PokemonComponent {
     void inject(BaseFragment baseFragment);
 
     void inject(PokemonListFragment pokemonListFragment);
+
+    // TODO 19) AJOUTER UNE METHODE inject POUR PokemonDetailFragment
 }

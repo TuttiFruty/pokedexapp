@@ -143,11 +143,12 @@ public class NavigationManager {
      * Start the pokemon detail view for the pokemonId<br>
      * We can pass it a View as a shared element between fragments.<br>
      *  @param pokemonId     the pokemon id to show
-     * @param sharedElements {@link View} shared between both fragments
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
-    public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
-
+    public void startPokemonDetail(int pokemonId, boolean isSwipe) {
+        // TODO 21) ENREGISTRER isSwipe dans this.isSwipe
+        // TODO 22) INSTANCIER UN PokemonDetailFragment VIA newInstance
+        // TODO 23) APPELER open AVEC LE FRAGMENT, IL N'Y A PAS DE sharedElement, CE N'EST PAS UNE VUE ROOT, IL N'Y A PAS DE TAG
     }
 
     /**

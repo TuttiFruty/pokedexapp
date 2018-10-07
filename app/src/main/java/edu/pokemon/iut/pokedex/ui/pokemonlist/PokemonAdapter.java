@@ -52,8 +52,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         /* Mapping of the data into the view*/
         Pokemon pokemon = dataSet.get(position);
 
-        // TODO 5) RECUPERER VIA LE HOLDER LA TEXTVIEW
-        // TODO 6) INSERER LE NOM DU POKEMON DANS LA TEXTVIEW
         holder.pokemonNumber.setText(context.getString(R.string.number, pokemon.getId()));
         holder.pokemonName.setText(pokemon.getName());
 
@@ -90,7 +88,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
      * Inner ViewHolder for the Pokemon's view
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        //TODO 3) DECLARER ICI UNE VARIABLE POUR LA TEXTVIEW
         final TextView pokemonName;
         final TextView pokemonNumber;
         final ImageView pokemonLogo;
@@ -100,7 +97,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
         ViewHolder(View v) {
             super(v);
-            //TODO 4) RECUPERER ICI UNE INSTANCE DE LA TEXTVIEW ET LA SAUVEGARGER DANS LA VARIABLE
             pokemonName = v.findViewById(R.id.tv_pokemon_name);
             pokemonNumber = v.findViewById(R.id.tv_pokemon_number);
             pokemonLogo = v.findViewById(R.id.iv_pokemon_logo);
