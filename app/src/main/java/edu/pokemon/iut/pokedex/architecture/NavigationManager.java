@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import edu.pokemon.iut.pokedex.R;
+import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonDetailFragment;
 import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListFragment;
 
 /**
@@ -73,6 +74,11 @@ public class NavigationManager {
     private void open(Fragment fragment, List<View> sharedElements, boolean isRoot, @Nullable String tag) {
         if (this.fragmentManager != null) {
             FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+
+            //If we are on tablet or we are not the root we don't need to add the fragment to the backstack
+            if (!isTabletNavigation() || isRoot) {
+                fragmentTransaction.addToBackStack(tag !=null?tag:fragment.toString());
+            }
 
             fragmentTransaction.replace(R.id.main_container, fragment).commit();
         }
@@ -142,13 +148,18 @@ public class NavigationManager {
     /**
      * Start the pokemon detail view for the pokemonId<br>
      * We can pass it a View as a shared element between fragments.<br>
-     *  @param pokemonId     the pokemon id to show
+     * @param pokemonId     the pokemon id to show
+     * @param sharedElements {@link View} shared between both fragments
      * @param isSwipe       true if we swipe to show the new pokemon, false otherwise
      */
-    public void startPokemonDetail(int pokemonId, boolean isSwipe) {
+    public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
+        this.currentPokemon = pokemonId;
         // TODO 21) ENREGISTRER isSwipe dans this.isSwipe
+        this.isSwipe = isSwipe;
         // TODO 22) INSTANCIER UN PokemonDetailFragment VIA newInstance
+        Fragment fragment = PokemonDetailFragment.newInstance(pokemonId);
         // TODO 23) APPELER open AVEC LE FRAGMENT, IL N'Y A PAS DE sharedElement, CE N'EST PAS UNE VUE ROOT, IL N'Y A PAS DE TAG
+        open(fragment, sharedElements, false, null);
     }
 
     /**

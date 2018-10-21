@@ -64,6 +64,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                 .load(pokemon.getSpritesString())
                 .apply(options)
                 .into(holder.pokemonLogo);
+
+        //TODO MANQUANT : SET LE CLICK LISTENER DE LA LIGNE D'UN POKEMON POUR DEMARRER LA NAVIGATION VERS LE DETAIL
+        holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), null, false));
+
     }
 
     @Override

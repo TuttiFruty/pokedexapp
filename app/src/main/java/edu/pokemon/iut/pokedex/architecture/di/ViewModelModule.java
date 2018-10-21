@@ -8,6 +8,7 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 import edu.pokemon.iut.pokedex.architecture.viewmodel.ViewModelFactory;
 import edu.pokemon.iut.pokedex.architecture.viewmodel.ViewModelKey;
+import edu.pokemon.iut.pokedex.ui.pokemondetail.PokemonViewModel;
 import edu.pokemon.iut.pokedex.ui.pokemonlist.PokemonListViewModel;
 
 /**
@@ -39,4 +40,14 @@ public abstract class ViewModelModule {
     abstract ViewModel bindsPokemonListViewModel(PokemonListViewModel pokemonListViewModel);
 
     // TODO 20) AJOUTER UNE METHODE bindsPokemonDetailViewModel POUR PokemonViewModel
+    /**
+     * Returns a ViewModel to manipulate a single Pokemon
+     *
+     * @param pokemonViewModel actual implementation of abstract class {@link ViewModel}
+     * @return an instance of abstract class {@link ViewModel}
+     */
+    @Binds
+    @IntoMap
+    @ViewModelKey(PokemonViewModel.class)
+    abstract ViewModel bindsPokemonViewModel(PokemonViewModel pokemonViewModel);
 }
