@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- TODO 1) AJOUTER UN item QUI AURA UNE ICONE DE RECHERCHE, QUI DEVRA TOUJOURS ETRE VISIBLE ET QUI A COMME actionViewClass une UNE SearchView -->
 </menu>

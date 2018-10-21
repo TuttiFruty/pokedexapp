@@ -26,7 +26,7 @@ public class NavigationManager {
     public static final String IMAGE_VIEW_POKEMON_SHADOW = "IMAGE_VIEW_POKEMON_SHADOW";
     private static final String TAG_ROOT = "ROOT";
     //Allow to know if we the app is launch in a tablet or big screen allow
-    private boolean tabletNavigation = false;
+    private boolean tabletNavigation;
     //Allow to know if we navigate through the app with swipe
     private boolean isSwipe = false;
 
@@ -154,11 +154,8 @@ public class NavigationManager {
      */
     public void startPokemonDetail(int pokemonId, List<View> sharedElements, boolean isSwipe) {
         this.currentPokemon = pokemonId;
-        // TODO 21) ENREGISTRER isSwipe dans this.isSwipe
         this.isSwipe = isSwipe;
-        // TODO 22) INSTANCIER UN PokemonDetailFragment VIA newInstance
         Fragment fragment = PokemonDetailFragment.newInstance(pokemonId);
-        // TODO 23) APPELER open AVEC LE FRAGMENT, IL N'Y A PAS DE sharedElement, CE N'EST PAS UNE VUE ROOT, IL N'Y A PAS DE TAG
         open(fragment, sharedElements, false, null);
     }
 
