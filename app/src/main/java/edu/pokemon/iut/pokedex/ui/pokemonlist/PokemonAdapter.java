@@ -51,11 +51,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         /* Mapping of the data into the view*/
         Pokemon pokemon = dataSet.get(position);
-
         holder.pokemonNumber.setText(context.getString(R.string.number, pokemon.getId()));
         holder.pokemonName.setText(pokemon.getName());
 
-        // BONUS IMAGE POKEMON ET PLACEHOLDER
+        //TODO 22) EN FONCTION DE L'ETAT DE CAPTURE DU POKEMON CHANGER L'IMAGE DE LA POKEBALL (pokemonCapture) (Vide > Pas capturer, Pleine > Capturer)
         RequestOptions options = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ic_launcher_pokeball)
@@ -65,9 +64,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                 .apply(options)
                 .into(holder.pokemonLogo);
 
-        //TODO MANQUANT : SET LE CLICK LISTENER DE LA LIGNE D'UN POKEMON POUR DEMARRER LA NAVIGATION VERS LE DETAIL
         holder.pokemonLine.setOnClickListener(v -> navigationManager.startPokemonDetail(pokemon.getId(), null, false));
 
+        //TODO 23) AJOUTER UN LISTENER AU CLICK SUR LA POKEBALL (pokemonCapture) QUI DECLENCHERA LA CAPTURE DU POKEMON (Utiliser le CaptureListener)
     }
 
     @Override

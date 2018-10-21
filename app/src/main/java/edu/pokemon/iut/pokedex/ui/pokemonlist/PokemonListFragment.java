@@ -26,6 +26,7 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
 
     private static final String TAG = PokemonListFragment.class.getSimpleName();
 
+    //TODO 13) CREER UNE CONSTANTE QUI SERVIRA DE CLE POUR RECUPERER LA REQUETE RECU POUR FILTRER LA LISTE DE POKEMON
 
     /* VIEWS */
     @BindView(R.id.rv_pokemon_list)
@@ -42,6 +43,8 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
      */
     public static PokemonListFragment newInstance(CharSequence query) {
         PokemonListFragment pokemonListFragment = new PokemonListFragment();
+
+        //TODO 14) UTILISER UN BUNDLE POUR ENREGISTRER LA REQUETE 'query' ET PASSER LE EN ARGUMENTS AU FRAGEMENT
         return pokemonListFragment;
     }
 
@@ -70,15 +73,14 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         if (getActivity() != null && getActivity().getResources() != null) {
             orientation = getActivity().getResources().getConfiguration().orientation;
         }
-
         LinearLayoutManager mLayoutManager;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             mLayoutManager = new LinearLayoutManager(getContext());
         } else {
             mLayoutManager = new GridLayoutManager(getContext(), 3);
         }
-
         pokemonListView.setLayoutManager(mLayoutManager);
+
         adapter = new PokemonAdapter(getContext(), navigationManager, this);
         pokemonListView.setAdapter(adapter);
         if(pokemonListView.getAdapter() != null) {
@@ -88,21 +90,25 @@ public class PokemonListFragment extends BaseFragment implements PokemonAdapter.
         //Initialisation and observation of the ViewModel for this screen
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PokemonListViewModel.class);
         CharSequence query = null;
+        //TODO 15) RECUPERER DANS LES ARGUMENTS DU FRAGMENT LA REQUETE ENREGISTRER ET METTER LA DANS 'query'
+        //TODO 16) TESTER LA RECHERCHE ET DITE MOI CE QUI NE VAS PAS
         viewModel.init(query);
 
-        viewModel.getPokemons().observe(this, pokemonList -> {
-            adapter.setData(pokemonList);
-        });
+        viewModel.getPokemons().observe(this, pokemonList -> adapter.setData(pokemonList));
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //TODO 32) BONUS FAITE REMONTER LA RECYCLER VIEW SUR LE DERNIER POKEMON CONSULTER
+        //TODO 33) AIDER VOUS AVEC NavigationManater ET scrollToPosition DE LA RECYCLERVIEW
     }
 
 
     @Override
     public void onCapture(Pokemon pokemon) {
+        //TODO 24) AVEC LE viewModel LANCER LA CAPTURE DU POKEMON CLICKER
+        //TODO 25) TESTER QUE LA POKEBALL CHANGE BIEN DE VIDE A PLEINE LORS DU CLICK (UNE CERTAINE LATENCE PEUT ETRE REMARQUER)
     }
 }
