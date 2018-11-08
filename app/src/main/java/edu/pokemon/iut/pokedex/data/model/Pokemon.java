@@ -72,7 +72,7 @@ public class Pokemon {
     }
 
     public int getHeight() {
-        return height;
+        return height/10;
     }
 
     public void setHeight(int height) {
@@ -96,7 +96,7 @@ public class Pokemon {
     }
 
     public int getWeight() {
-        return weight;
+        return weight/10;
     }
 
     public void setWeight(int weight) {

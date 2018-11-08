@@ -3,6 +3,7 @@ package edu.pokemon.iut.pokedex.ui.pokemondetail;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -143,13 +144,13 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
 
         //The sharedElement between screens is only available for version above of LOLLIPOP
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if(transitionNames != null ){
+            if (transitionNames != null) {
                 for (String transitionName : transitionNames) {
-                    if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_LOGO)){
+                    if (transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_LOGO)) {
                         imageViewPokemonLogo.setTransitionName(transitionName);
-                    }else if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_CAPTURE)){
+                    } else if (transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_CAPTURE)) {
                         imageViewPokemonCapture.setTransitionName(transitionName);
-                    }else if(transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_SHADOW)){
+                    } else if (transitionName.contains(NavigationManager.IMAGE_VIEW_POKEMON_SHADOW)) {
                         imageViewPokemonCaptureShadow.setTransitionName(transitionName);
                     }
                 }
@@ -175,11 +176,11 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
     /**
      * Initialise the view with the given pokemon
      *
-     * @param pokemon {@link Pokemon} to show
+     * @param pokemon   {@link Pokemon} to show
      * @param viewModel allows access to capture method
      */
     private void initView(Pokemon pokemon, PokemonViewModel viewModel) {
-        if(pokemon != null) {
+        if (pokemon != null) {
             //To be able to use the Shared element we need to disable animation from Glide
             RequestOptions options = new RequestOptions()
                     .centerCrop()
@@ -223,9 +224,20 @@ public class PokemonDetailFragment extends BaseFragment implements PokemonGestur
             /* Avoid multiplication of types from ViewModel triggering to much time */
             linearLayoutPokemonTypes.removeAllViews();
             for (Type type : pokemon.getTypes()) {
-                TextView textViewType = new TextView(getContext());
-                textViewType.setText(type.getType().getName());
-                linearLayoutPokemonTypes.addView(textViewType);
+                View pokemonLine = getLayoutInflater().inflate(R.layout.type_line_view, null);
+
+                TextView pokemonType = pokemonLine.findViewById(R.id.tv_type_pokemon);
+                pokemonType.setText(type.getType().getName());
+
+                ImageView pokemonTypeColor = pokemonLine.findViewById(R.id.iv_type_pokemon);
+                try{
+                    int color = getResources().getColor(getResources().getIdentifier(type.getType().getName(), "color", getContext().getPackageName()));
+                    pokemonTypeColor.setBackgroundColor(color);
+                }catch(Resources.NotFoundException e){
+                    pokemonTypeColor.setBackgroundColor(getResources().getColor(R.color.defaultType));
+                }
+
+                linearLayoutPokemonTypes.addView(pokemonLine);
             }
         }
     }

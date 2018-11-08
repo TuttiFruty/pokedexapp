@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="steel">#43464B</color>
+    <color name="rock">#5A4D41</color>
+    <color name="psychic">#FFC0CB</color>
+    <color name="fire">#FFA500</color>
+    <color name="ice">#D5D5FF</color>
+    <color name="ground">#AF964A</color>
+    <color name="grass">#7DBD7D</color>
+    <color name="defaultType">#565656</color>
+</resources>

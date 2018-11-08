@@ -81,7 +81,8 @@
         android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_pokemon_logo">
+        app:layout_constraintTop_toBottomOf="@+id/iv_pokemon_logo"
+        >
 
         <TextView
             android:id="@+id/tv_pokemon_type_label"

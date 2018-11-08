@@ -96,12 +96,25 @@ public class BaseActivity extends AppCompatActivity {
 
         // Restore last Query if any exist and keep search bar activated
         // We do not rerun the query or re input the text
-        if(this.lastQuery != null && !this.lastQuery.isEmpty()){
+        if (this.lastQuery != null && !this.lastQuery.isEmpty()) {
             searchItem.expandActionView();
             searchView.setQuery(this.lastQuery, true);
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_night:
+                PokedexApp.app().setIsNightModeEnabled(! PokedexApp.app().isNightModeEnabled());
+                recreate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -113,7 +126,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             this.lastQuery = savedInstanceState.getString(KEY_LAST_SEARCH_QUERY, null);
         }
     }

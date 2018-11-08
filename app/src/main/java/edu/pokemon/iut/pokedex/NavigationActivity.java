@@ -2,6 +2,7 @@ package edu.pokemon.iut.pokedex;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 
 import edu.pokemon.iut.pokedex.architecture.BaseActivity;
@@ -16,6 +17,12 @@ public class NavigationActivity extends BaseActivity implements NavigationManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        if (PokedexApp.app().isNightModeEnabled()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         // Initialize the NavigationManager with this activity's FragmentManager
         this.navigationManager.init(getSupportFragmentManager());

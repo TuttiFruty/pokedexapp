@@ -6,4 +6,18 @@
     <color name="colorAccent">#0277bd</color>
     <color name="colorAccentDark">#004c8c</color>
     <color name="colorAccentLight">#58a5f0</color>
+    <color name="colorBackgroundWhite">#ffffff</color>
+    <color name="colorBackgroundBlack">#000000</color>
+    <color name="textColor">#000000</color>
+
+
+    <color name="steel">#43464B</color>
+    <color name="rock">#5A4D41</color>
+    <color name="psychic">#FFC0CB</color>
+    <color name="fire">#FFA500</color>
+    <color name="ice">#D5D5FF</color>
+    <color name="ground">#AF964A</color>
+    <color name="grass">#7DBD7D</color>
+    <color name="defaultType">#565656</color>
+
 </resources>

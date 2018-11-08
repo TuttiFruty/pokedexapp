@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import edu.pokemon.iut.pokedex.data.model.Pokemon;
+import edu.pokemon.iut.pokedex.data.model.Type;
 import edu.pokemon.iut.pokedex.data.webservice.PokemonApi;
 import edu.pokemon.iut.pokedex.data.webservice.PokemonApiClient;
 import retrofit2.Response;
@@ -63,6 +64,7 @@ public class PokemonService {
             pokemon.getSprites().setId(pokemon.getId());
             pokemon.setSpritesString(pokemon.getSprites().getFrontDefault());
             pokemon.setTypes(Objects.requireNonNull(response.body()).getTypes());
+
         }
 
         return pokemon;

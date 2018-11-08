@@ -12,4 +12,5 @@
     <string name="exp" tools:ignore="PluralsCandidate">%d exp</string>
     <string name="height">%d m</string>
     <string name="weight">%d kg</string>
+    <string name="action_night">night moon</string>
 </resources>
